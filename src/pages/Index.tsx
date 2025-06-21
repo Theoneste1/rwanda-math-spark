@@ -5,8 +5,8 @@ import ChatBot from "../components/ChatBot";
 const Index = () => {
   const sponsors = [
     { name: "Jane Street", url: "https://www.janestreet.com/" },
-    { name: "Carina Initiatives", url: "https://www.carina.fund/" },
-    { name: "AIMS Rwanda", url: "https://aims.ac.rw/" },
+    { name: "Carina Initiatives", url: "https://www.carina.fund/", logo: "/lovable-uploads/54fd327f-f5c3-41fe-9b5b-be85e246227a.png" },
+    { name: "AIMS Rwanda", url: "https://aims.ac.rw/", logo: "/lovable-uploads/4b9719bb-905e-4daa-b406-6d19562edd83.png" },
     { name: "African Olympiad Foundation", url: "https://africanolympiadfoundation.org/" },
   ];
 
@@ -14,13 +14,13 @@ const Index = () => {
     { name: "MIT", url: "https://www.mit.edu/", logo: "/lovable-uploads/c68a1031-acb9-47de-a1ee-057ba9d2c255.png" },
     { name: "Harvard", url: "https://www.harvard.edu/", logo: "/lovable-uploads/3b465dad-8059-4e8c-acc8-fcee7a6653cd.png" },
     { name: "Yale", url: "https://www.yale.edu/", logo: "/lovable-uploads/ad410bb8-b1e7-4597-8b81-c8ca068bb15b.png" },
-    { name: "African Leadership University", url: "https://www.alueducation.com/", logo: "/lovable-uploads/17cc90d2-2994-4d96-8763-249e19c98daf.png" },
+    { name: "African Leadership University", url: "https://www.alueducation.com/", logo: "/lovable-uploads/5a495ba1-4710-4fdf-91f1-2d1334030d5c.png" }, // Updated ALU logo
     { name: "Ashesi", url: "https://www.ashesi.edu.gh/", logo: "/lovable-uploads/87a9489c-9a9d-4a03-bb95-34d2efab464b.png" },
     { name: "Caltech", url: "https://www.caltech.edu/", logo: "/lovable-uploads/9341434d-7938-45f8-aeb3-1d41bf781299.png" },
     { name: "Rice", url: "https://www.rice.edu/", logo: "/lovable-uploads/ecda7b10-e626-4cd7-a151-f7d0b549d327.png" },
     { name: "University of Cambridge", url: "https://www.cam.ac.uk/", logo: "/lovable-uploads/cc887979-9afc-423c-bdc6-202b2585112a.png" },
     { name: "Carnegie Mellon", url: "https://www.cmu.edu/" },
-    { name: "UGHE", url: "https://ughe.org/" },
+    { name: "UGHE", url: "https://ughe.org/", logo: "/lovable-uploads/fe28381d-f15e-4390-8df4-fcafd2bf8079.png" }, // Added UGHE logo
   ];
 
   return (
@@ -195,9 +195,17 @@ const Index = () => {
                 rel="noopener noreferrer"
                 className="bg-gray-50 p-6 rounded-lg flex items-center justify-center hover:shadow-lg transition-shadow duration-300 h-24"
               >
-                <span className="text-gray-700 font-semibold text-center text-sm">
-                  {sponsor.name}
-                </span>
+                {sponsor.logo ? (
+                  <img
+                    src={sponsor.logo}
+                    alt={sponsor.name}
+                    className="max-w-full max-h-full object-contain"
+                  />
+                ) : (
+                  <span className="text-gray-700 font-semibold text-center text-sm">
+                    {sponsor.name}
+                  </span>
+                )}
               </a>
             ))}
           </div>
