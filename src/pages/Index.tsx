@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { ChevronRight, Users, Trophy, Target, Award } from "lucide-react";
 import ChatBot from "../components/ChatBot";
@@ -12,15 +11,15 @@ const Index = () => {
   ];
 
   const universities = [
-    { name: "MIT", url: "https://www.mit.edu/" },
-    { name: "Harvard", url: "https://www.harvard.edu/" },
+    { name: "MIT", url: "https://www.mit.edu/", logo: "/lovable-uploads/c68a1031-acb9-47de-a1ee-057ba9d2c255.png" },
+    { name: "Harvard", url: "https://www.harvard.edu/", logo: "/lovable-uploads/3b465dad-8059-4e8c-acc8-fcee7a6653cd.png" },
+    { name: "Yale", url: "https://www.yale.edu/", logo: "/lovable-uploads/ad410bb8-b1e7-4597-8b81-c8ca068bb15b.png" },
+    { name: "African Leadership University", url: "https://www.alueducation.com/", logo: "/lovable-uploads/17cc90d2-2994-4d96-8763-249e19c98daf.png" },
+    { name: "Ashesi", url: "https://www.ashesi.edu.gh/", logo: "/lovable-uploads/87a9489c-9a9d-4a03-bb95-34d2efab464b.png" },
+    { name: "Caltech", url: "https://www.caltech.edu/", logo: "/lovable-uploads/9341434d-7938-45f8-aeb3-1d41bf781299.png" },
+    { name: "Rice", url: "https://www.rice.edu/", logo: "/lovable-uploads/ecda7b10-e626-4cd7-a151-f7d0b549d327.png" },
+    { name: "University of Cambridge", url: "https://www.cam.ac.uk/", logo: "/lovable-uploads/cc887979-9afc-423c-bdc6-202b2585112a.png" },
     { name: "Carnegie Mellon", url: "https://www.cmu.edu/" },
-    { name: "African Leadership University", url: "https://www.alueducation.com/" },
-    { name: "Yale", url: "https://www.yale.edu/" },
-    { name: "Ashesi", url: "https://www.ashesi.edu.gh/" },
-    { name: "Caltech", url: "https://www.caltech.edu/" },
-    { name: "Rice", url: "https://www.rice.edu/" },
-    { name: "University of Cambridge", url: "https://www.cam.ac.uk/" },
     { name: "UGHE", url: "https://ughe.org/" },
   ];
 
@@ -211,18 +210,20 @@ const Index = () => {
           <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">
             Where Our Alumni Study
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {universities.map((university, index) => (
               <a
                 key={index}
                 href={university.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white p-4 rounded-lg flex items-center justify-center hover:shadow-lg transition-shadow duration-300 h-20"
+                className="bg-white p-6 rounded-lg flex items-center justify-center hover:shadow-lg transition-shadow duration-300 h-32"
               >
-                <span className="text-gray-700 font-medium text-center text-xs">
-                  {university.name}
-                </span>
+                <img
+                  src={university.logo}
+                  alt={university.name}
+                  className="max-w-full max-h-full object-contain"
+                />
               </a>
             ))}
           </div>
