@@ -142,8 +142,8 @@ const Campers = () => {
       
       // Add AIMS logo at the top center
       // Logo dimensions (adjustable)
-      const logoWidth = 60;
-      const logoHeight = 15;
+      const logoWidth = 70;
+      const logoHeight = 20;
       const logoX = (pageWidth - logoWidth) / 2; // Center horizontally
       const logoY = 20;
       
