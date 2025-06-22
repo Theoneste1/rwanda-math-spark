@@ -197,18 +197,6 @@ const Campers = () => {
     alert(`Generated ${selectedCampers.size} invitation letters!`);
   };
 
-  // Filter campers based on search term
-  const filteredCampers = campers.filter(camper =>
-    camper.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    camper.school.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    camper.district.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  // Pagination logic
-  const totalPages = Math.ceil(filteredCampers.length / campersPerPage);
-  const startIndex = (currentPage - 1) * campersPerPage;
-  const currentCampers = filteredCampers.slice(startIndex, startIndex + campersPerPage);
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 pt-16">
