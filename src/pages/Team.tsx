@@ -32,6 +32,20 @@ const Team = () => {
       image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
       description: "Handles operations, logistics, and administrative coordination.",
     },
+    {
+      name: "Theoneste Nsanzabarinda",
+      role: "Program Support Officer",
+      slug: "theoneste-nsanzabarinda",
+      image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=face",
+      description: "Theoneste is a computer science graduate from African Leadership University and a Millennium Fellow. He supports the Rwanda Mathematics Olympiad as a Program Support Officer and is passionate about mentoring students and problem-solving.",
+    },
+    {
+      name: "Obed Kor Nsanzimfura",
+      role: "Program Manager",
+      slug: "obed-kor-nsanzimfura",
+      image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=face",
+      description: "Obed Kor Nsanzimfura manages the Rwanda Mathematics Olympiad and has led Rwanda's teams to international math competitions like IMO and PAMO. He is also an experienced math coach and full-stack developer.",
+    },
   ];
 
   return (
@@ -49,7 +63,7 @@ const Team = () => {
       {/* Team Grid */}
       <section className="py-20">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {teamMembers.map((member, index) => (
               <Link
                 key={index}
@@ -68,9 +82,9 @@ const Team = () => {
                     {member.name}
                   </h3>
                   <p className="text-blue-600 font-semibold mb-3">{member.role}</p>
-                  <p className="text-gray-600">{member.description}</p>
+                  <p className="text-gray-600 text-sm line-clamp-3">{member.description}</p>
                   <div className="mt-4 flex items-center text-blue-600 font-semibold">
-                    <span>Learn more</span>
+                    <span>Full Profile</span>
                     <svg className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>

@@ -77,6 +77,42 @@ const TeamMember = () => {
         phone: "+250 788 123 004",
         linkedin: "https://linkedin.com/in/emmanuel-nshimiyimana"
       }
+    },
+    "theoneste-nsanzabarinda": {
+      name: "Theoneste Nsanzabarinda",
+      role: "Program Support Officer",
+      image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&h=600&fit=crop&crop=face",
+      bio: "Theoneste Nsanzabarinda is a dedicated computer science graduate of African Leadership University, and a Millennium Fellow. Throughout his career, he has worked on various web and software development projects, gaining experience in full-stack engineering.",
+      background: "In his role as Program Support Officer for the Rwanda Mathematics Olympiad, Theoneste mentors high school students preparing for national and international math competitions and organizes Olympiad training programs. His passion lies in fostering problem-solving skills and nurturing the next generation of mathematicians and technologists. Outside of his Olympiad work, Theoneste enjoys competitive programming and creating tools that improve learning experiences.",
+      achievements: [
+        "Mentored over 100 high school students in math competitions",
+        "Developed digital training platforms for remote learning",
+        "Led organizing committee for 3 national math competitions",
+        "Created automated scoring systems for olympiad contests"
+      ],
+      contact: {
+        email: "theoneste@rwandaolympiad.rw",
+        phone: "+250 788 123 005",
+        linkedin: "https://linkedin.com/in/theoneste-nsanzabarinda"
+      }
+    },
+    "obed-kor-nsanzimfura": {
+      name: "Obed Kor Nsanzimfura",
+      role: "Program Manager",
+      image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&h=600&fit=crop&crop=face",
+      bio: "Obed Kor Nsanzimfura is the Program Manager for the Rwanda Mathematics Olympiad, where he oversees national competitions, training camps, and Olympiad team selection. Under his leadership, Rwanda's math teams have participated successfully at prestigious international competitions, including PAMO and the IMO, earning medals and honorable mentions.",
+      background: "In addition to his Olympiad responsibilities, Obed is an experienced math coach and volunteer mentor who enjoys guiding students through challenging math concepts. His technical background as a full-stack developer and data analyst allows him to contribute creatively to Olympiad operations, problem databases, and training tools. Obed is deeply committed to cultivating mathematical excellence in Rwanda and supporting the next generation of problem solvers.",
+      achievements: [
+        "Led Rwanda to first-ever IMO participation in 2023",
+        "Coordinated training camps for over 200 students annually",
+        "Developed comprehensive problem database with 1000+ questions",
+        "Established partnerships with international math organizations"
+      ],
+      contact: {
+        email: "obed@rwandaolympiad.rw",
+        phone: "+250 788 123 006",
+        linkedin: "https://linkedin.com/in/obed-kor-nsanzimfura"
+      }
     }
   };
 
