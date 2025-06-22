@@ -29,31 +29,61 @@ const Campers = () => {
       const response = await fetch('https://docs.google.com/spreadsheets/d/1_goCAnx9eFbY_hBHQpUggbWYQKWuKZrUPWP8s8zgpIM/gviz/tq?tqx=out:csv&sheet=CAMP1');
       const csvText = await response.text();
       
-      // Parse CSV
-      const lines = csvText.split('\n');
-      const headers = lines[0].split(',').map(header => header.replace(/"/g, '').trim());
+      console.log('Raw CSV data:', csvText);
+      
+      // Parse CSV - Split by lines and handle quoted values properly
+      const lines = csvText.split('\n').filter(line => line.trim());
+      if (lines.length === 0) return [];
+      
+      // Parse the header row
+      const headerLine = lines[0];
+      const headers = headerLine.split(',').map(header => header.replace(/"/g, '').trim());
+      
+      console.log('Headers:', headers);
       
       const campersData: Camper[] = [];
+      
       for (let i = 1; i < lines.length; i++) {
-        if (lines[i].trim()) {
-          const values = lines[i].split(',').map(value => value.replace(/"/g, '').trim());
-          const camper: Camper = {
-            name: '',
-            school: '',
-            district: '',
-            gender: ''
-          };
+        const line = lines[i].trim();
+        if (!line) continue;
+        
+        // Simple CSV parsing - split by comma and remove quotes
+        const values = line.split(',').map(value => value.replace(/"/g, '').trim());
+        
+        // Create camper object
+        const camper: Camper = {
+          name: '',
+          school: '',
+          district: '',
+          gender: ''
+        };
+        
+        // Map the values to our expected fields
+        headers.forEach((header, index) => {
+          const value = values[index] || '';
           
-          headers.forEach((header, index) => {
-            camper[header.toLowerCase()] = values[index] || '';
-          });
-          
-          if (camper.name) {
-            campersData.push(camper);
+          // Map CSV headers to our expected field names
+          if (header.toUpperCase().includes('STUDENT NAME') || header.toUpperCase().includes('NAME')) {
+            camper.name = value;
+          } else if (header.toUpperCase().includes('SCHOOL')) {
+            camper.school = value;
+          } else if (header.toUpperCase().includes('DISTRICT') && !header.toUpperCase().includes('HOME')) {
+            camper.district = value;
+          } else if (header.toUpperCase().includes('GENDER')) {
+            camper.gender = value;
           }
+          
+          // Store all fields for potential future use
+          camper[header.toLowerCase().replace(/\s+/g, '_')] = value;
+        });
+        
+        // Only add campers with a name
+        if (camper.name && camper.name !== 'NO') {
+          campersData.push(camper);
         }
       }
       
+      console.log('Parsed campers:', campersData);
       return campersData;
     },
   });
@@ -166,6 +196,18 @@ const Campers = () => {
     
     alert(`Generated ${selectedCampers.size} invitation letters!`);
   };
+
+  // Filter campers based on search term
+  const filteredCampers = campers.filter(camper =>
+    camper.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    camper.school.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    camper.district.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredCampers.length / campersPerPage);
+  const startIndex = (currentPage - 1) * campersPerPage;
+  const currentCampers = filteredCampers.slice(startIndex, startIndex + campersPerPage);
 
   if (isLoading) {
     return (
