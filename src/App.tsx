@@ -10,6 +10,8 @@ import About from "./pages/About";
 import Impact from "./pages/Impact";
 import Team from "./pages/Team";
 import TeamMember from "./pages/TeamMember";
+import Campers from "./pages/Campers";
+import CompetitionResults from "./pages/CompetitionResults";
 import GetInvolved from "./pages/GetInvolved";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
@@ -29,6 +31,8 @@ const App = () => (
             <Route path="/impact" element={<Impact />} />
             <Route path="/team" element={<Team />} />
             <Route path="/team/:memberName" element={<TeamMember />} />
+            <Route path="/competitions/campers" element={<Campers />} />
+            <Route path="/competitions/results" element={<CompetitionResults />} />
             <Route path="/get-involved" element={<GetInvolved />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="*" element={<NotFound />} />

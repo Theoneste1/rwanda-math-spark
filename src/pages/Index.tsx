@@ -142,11 +142,11 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Why Invest Section */}
+      {/* Why Get Involved Section */}
       <section className="py-20 bg-blue-900 text-white">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-16">
-            Why Invest in Rwanda's Math Olympiad?
+            Why Get Involved with Rwanda's Math Olympiad?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">

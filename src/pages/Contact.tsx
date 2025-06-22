@@ -1,7 +1,9 @@
 
-import { Mail, Phone, MapPin, Clock, Facebook, Twitter, Instagram } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 
 const Contact = () => {
+  const linkedinUrl = "https://www.linkedin.com/company/103636241/admin/dashboard/";
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -28,8 +30,9 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-800 mb-1">Email</h3>
-                    <p className="text-gray-600">invest@rwandaolympiad.rw</p>
-                    <p className="text-gray-600">info@rwandaolympiad.rw</p>
+                    <p className="text-gray-600">theoneste.sanzabarinda@aims.ac.rw</p>
+                    <p className="text-gray-600">tnsnzabarinda@alueducation.com</p>
+                    <p className="text-gray-600">theoneste99@gmail.com</p>
                   </div>
                 </div>
                 
@@ -97,7 +100,15 @@ const Contact = () => {
           </p>
           <div className="flex justify-center space-x-6">
             <a
-              href="https://twitter.com/rwandaolympiad"
+              href={linkedinUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-blue-600 text-white p-4 rounded-full hover:bg-blue-700 transition-colors duration-300 transform hover:scale-110"
+            >
+              <Linkedin className="w-8 h-8" />
+            </a>
+            <a
+              href={linkedinUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="bg-blue-500 text-white p-4 rounded-full hover:bg-blue-600 transition-colors duration-300 transform hover:scale-110"
@@ -105,7 +116,7 @@ const Contact = () => {
               <Twitter className="w-8 h-8" />
             </a>
             <a
-              href="https://facebook.com/rwandaolympiad"
+              href={linkedinUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="bg-blue-700 text-white p-4 rounded-full hover:bg-blue-800 transition-colors duration-300 transform hover:scale-110"
@@ -113,7 +124,7 @@ const Contact = () => {
               <Facebook className="w-8 h-8" />
             </a>
             <a
-              href="https://instagram.com/rwandaolympiad"
+              href={linkedinUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="bg-pink-500 text-white p-4 rounded-full hover:bg-pink-600 transition-colors duration-300 transform hover:scale-110"
@@ -131,49 +142,49 @@ const Contact = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white rounded-lg shadow-lg p-8 text-center hover:shadow-xl transition-shadow duration-300">
               <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
-                <GraduationCap className="w-8 h-8 text-blue-600" />
+                <Mail className="w-8 h-8 text-blue-600" />
               </div>
               <h3 className="text-xl font-semibold text-gray-800 mb-4">For Students & Parents</h3>
               <p className="text-gray-600 mb-4">
                 Questions about participation, training camps, or academic programs
               </p>
               <a
-                href="mailto:students@rwandaolympiad.rw"
+                href="mailto:theoneste.sanzabarinda@aims.ac.rw"
                 className="text-blue-600 hover:text-blue-800 font-semibold"
               >
-                students@rwandaolympiad.rw
+                theoneste.sanzabarinda@aims.ac.rw
               </a>
             </div>
             
             <div className="bg-white rounded-lg shadow-lg p-8 text-center hover:shadow-xl transition-shadow duration-300">
               <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
-                <Building className="w-8 h-8 text-green-600" />
+                <Mail className="w-8 h-8 text-green-600" />
               </div>
               <h3 className="text-xl font-semibold text-gray-800 mb-4">For Schools & Teachers</h3>
               <p className="text-gray-600 mb-4">
                 Partnership opportunities, teacher training, and school registration
               </p>
               <a
-                href="mailto:schools@rwandaolympiad.rw"
+                href="mailto:tnsnzabarinda@alueducation.com"
                 className="text-green-600 hover:text-green-800 font-semibold"
               >
-                schools@rwandaolympiad.rw
+                tnsnzabarinda@alueducation.com
               </a>
             </div>
             
             <div className="bg-white rounded-lg shadow-lg p-8 text-center hover:shadow-xl transition-shadow duration-300">
               <div className="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
-                <DollarSign className="w-8 h-8 text-purple-600" />
+                <Mail className="w-8 h-8 text-purple-600" />
               </div>
               <h3 className="text-xl font-semibold text-gray-800 mb-4">For Sponsors & Partners</h3>
               <p className="text-gray-600 mb-4">
                 Investment opportunities, sponsorships, and corporate partnerships
               </p>
               <a
-                href="mailto:invest@rwandaolympiad.rw"
+                href="mailto:theoneste99@gmail.com"
                 className="text-purple-600 hover:text-purple-800 font-semibold"
               >
-                invest@rwandaolympiad.rw
+                theoneste99@gmail.com
               </a>
             </div>
           </div>
@@ -182,8 +193,5 @@ const Contact = () => {
     </div>
   );
 };
-
-// Import the missing icons
-import { GraduationCap, Building, DollarSign } from "lucide-react";
 
 export default Contact;

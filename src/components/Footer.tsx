@@ -1,8 +1,10 @@
 
 import { Link } from "react-router-dom";
-import { Facebook, Twitter, Instagram, Mail, Phone, MapPin } from "lucide-react";
+import { Facebook, Twitter, Instagram, Mail, Phone, MapPin, Linkedin } from "lucide-react";
 
 const Footer = () => {
+  const linkedinUrl = "https://www.linkedin.com/company/103636241/admin/dashboard/";
+
   return (
     <footer className="bg-gray-900 text-white">
       <div className="max-w-6xl mx-auto px-4 py-12">
@@ -17,7 +19,15 @@ const Footer = () => {
             </p>
             <div className="flex space-x-4">
               <a
-                href="https://twitter.com/rwandaolympiad"
+                href={linkedinUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-blue-400 transition-colors duration-200"
+              >
+                <Linkedin className="w-6 h-6" />
+              </a>
+              <a
+                href={linkedinUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-blue-400 transition-colors duration-200"
@@ -25,7 +35,7 @@ const Footer = () => {
                 <Twitter className="w-6 h-6" />
               </a>
               <a
-                href="https://facebook.com/rwandaolympiad"
+                href={linkedinUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-blue-400 transition-colors duration-200"
@@ -33,7 +43,7 @@ const Footer = () => {
                 <Facebook className="w-6 h-6" />
               </a>
               <a
-                href="https://instagram.com/rwandaolympiad"
+                href={linkedinUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-blue-400 transition-colors duration-200"
@@ -76,7 +86,7 @@ const Footer = () => {
             <ul className="space-y-2">
               <li className="flex items-center text-gray-300">
                 <Mail className="w-4 h-4 mr-2" />
-                invest@rwandaolympiad.rw
+                theoneste.sanzabarinda@aims.ac.rw
               </li>
               <li className="flex items-center text-gray-300">
                 <Phone className="w-4 h-4 mr-2" />
