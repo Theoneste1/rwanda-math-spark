@@ -134,33 +134,46 @@ const Campers = () => {
 
       const doc = new jsPDF();
       
-      // Set up fonts and styles
-      doc.setFont('helvetica');
+      // Set consistent margins
+      const leftMargin = 20;
+      const rightMargin = 20;
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const contentWidth = pageWidth - leftMargin - rightMargin;
       
-      // Header - Logo placeholder
-      doc.setFontSize(16);
+      // Add AIMS logo at the top center
+      // Logo dimensions (adjustable)
+      const logoWidth = 60;
+      const logoHeight = 15;
+      const logoX = (pageWidth - logoWidth) / 2; // Center horizontally
+      const logoY = 20;
+      
+      try {
+        doc.addImage('/lovable-uploads/0116a245-86cb-4150-97eb-0cc44a3f25f1.png', 'PNG', logoX, logoY, logoWidth, logoHeight);
+      } catch (error) {
+        console.log('Logo image not loaded, continuing without logo');
+      }
+      
+      // Document title - centered below logo
       doc.setFont('helvetica', 'bold');
-      doc.text('RWANDA MATHEMATICS OLYMPIAD', 105, 30, { align: 'center' });
-      
-      // Title
       doc.setFontSize(14);
-      doc.text('CAMP INVITATION LETTER', 105, 45, { align: 'center' });
+      const titleY = logoY + logoHeight + 15;
+      doc.text('CAMP INVITATION LETTER', pageWidth / 2, titleY, { align: 'center' });
       
-      // Date
+      // Date - aligned to left margin
       doc.setFontSize(10);
       doc.setFont('helvetica', 'normal');
       const currentDate = new Date().toLocaleDateString();
-      doc.text(`Date: ${currentDate}`, 20, 65);
+      const dateY = titleY + 20;
+      doc.text(`Date: ${currentDate}`, leftMargin, dateY);
       
-      // Greeting
+      // Greeting - aligned to left margin
       doc.setFontSize(12);
-      doc.text(`Dear ${camper.name},`, 20, 80);
+      const greetingY = dateY + 15;
+      doc.text(`Dear ${camper.name},`, leftMargin, greetingY);
       
-      // Body text
+      // Body text - respecting margins with proper line wrapping
       const bodyText = [
-        'Congratulations! You have been selected to participate in the Rwanda Mathematics',
-        'Olympiad Training Camp 2025. This is a prestigious opportunity to enhance your',
-        'mathematical skills and represent Rwanda in international competitions.',
+        'Congratulations! You have been selected to participate in the Rwanda Mathematics Olympiad Training Camp 2025. This is a prestigious opportunity to enhance your mathematical skills and represent Rwanda in international competitions.',
         '',
         'Camp Details:',
         '• Duration: 2 weeks intensive training',
@@ -168,27 +181,84 @@ const Campers = () => {
         '• Activities: Advanced problem solving, competition preparation',
         '• Accommodation and meals provided',
         '',
-        'Please confirm your attendance by responding to this invitation.',
-        'We look forward to seeing you at the camp.',
-        '',
-        'Best regards,',
-        '',
-        'Rwanda Mathematics Olympiad Team'
+        'Please confirm your attendance by responding to this invitation. We look forward to seeing you at the camp.'
       ];
       
-      let yPosition = 95;
+      let yPosition = greetingY + 15;
+      const lineHeight = 6;
+      
       bodyText.forEach(line => {
-        if (line.startsWith('•')) {
-          doc.text(line, 25, yPosition);
-        } else {
-          doc.text(line, 20, yPosition);
+        if (line === '') {
+          yPosition += lineHeight;
+          return;
         }
-        yPosition += 6;
+        
+        if (line.startsWith('•')) {
+          // Bullet points - slightly indented
+          const bulletLines = doc.splitTextToSize(line, contentWidth - 10);
+          bulletLines.forEach((bulletLine: string) => {
+            doc.text(bulletLine, leftMargin + 5, yPosition);
+            yPosition += lineHeight;
+          });
+        } else if (line === 'Camp Details:') {
+          // Section header
+          doc.setFont('helvetica', 'bold');
+          doc.text(line, leftMargin, yPosition);
+          doc.setFont('helvetica', 'normal');
+          yPosition += lineHeight;
+        } else {
+          // Regular paragraph text - justified within margins
+          const wrappedLines = doc.splitTextToSize(line, contentWidth);
+          wrappedLines.forEach((wrappedLine: string) => {
+            doc.text(wrappedLine, leftMargin, yPosition);
+            yPosition += lineHeight;
+          });
+        }
       });
       
-      // Footer
+      // Closing and signature section
+      yPosition += 10; // Extra space before closing
+      
+      // Add signature image aligned to left margin
+      const signatureWidth = 45; // 1.5 units (adjustable)
+      const signatureHeight = 15; // 0.5 units (adjustable)
+      const signatureY = yPosition;
+      
+      try {
+        doc.addImage('/lovable-uploads/a1bc53f6-4c31-434f-863c-635ccb3dc5ed.png', 'PNG', leftMargin, signatureY, signatureWidth, signatureHeight);
+      } catch (error) {
+        console.log('Signature image not loaded, continuing without signature');
+      }
+      
+      // Signer details below signature - aligned to left margin
+      const signerDetailsY = signatureY + signatureHeight + 5;
+      doc.setFontSize(10);
+      
+      const signerDetails = [
+        'Best Regards,',
+        '',
+        'Dr. [Name]',
+        'Director',
+        'African Institute for Mathematical Sciences Rwanda'
+      ];
+      
+      let signerY = signerDetailsY;
+      signerDetails.forEach(detail => {
+        if (detail === '') {
+          signerY += 4;
+        } else {
+          doc.text(detail, leftMargin, signerY);
+          signerY += 5;
+        }
+      });
+      
+      // Footer with page number - centered at bottom
       doc.setFontSize(8);
-      doc.text('Rwanda Mathematics Olympiad | Page 1', 105, 280, { align: 'center' });
+      doc.setTextColor(128, 128, 128); // Subtle gray color
+      doc.text('Rwanda Mathematics Olympiad | Page 1', pageWidth / 2, 280, { align: 'center' });
+      
+      // Reset text color for next document
+      doc.setTextColor(0, 0, 0);
       
       // Save the PDF
       doc.save(`${camper.name.replace(/\s+/g, '_')}_RMC2025_INVITATION.pdf`);
