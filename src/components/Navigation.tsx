@@ -44,7 +44,11 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <span className="text-2xl font-bold text-blue-600">RwMO</span>
+            <img 
+              src="/lovable-uploads/b075c570-24b9-4af5-9c85-ee3ca13412df.png" 
+              alt="Rwanda Mathematics Olympiad" 
+              className="h-10 w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}
