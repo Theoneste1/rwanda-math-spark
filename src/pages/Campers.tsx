@@ -13,7 +13,9 @@ interface Camper {
   school: string;
   district: string;
   gender: string;
-  [key: string]: string;
+  s_date?: string;
+  e_date?: string;
+  [key: string]: string | undefined;
 }
 
 const Campers = () => {
@@ -71,6 +73,10 @@ const Campers = () => {
             camper.district = value;
           } else if (header.toUpperCase().includes('GENDER')) {
             camper.gender = value;
+          } else if (header.toUpperCase().includes('S_DATE')) {
+            camper.s_date = value;
+          } else if (header.toUpperCase().includes('E_DATE')) {
+            camper.e_date = value;
           }
           
           // Store all fields for potential future use
@@ -157,7 +163,7 @@ const Campers = () => {
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(14);
       const titleY = logoY + logoHeight + 15;
-      doc.text('CAMP INVITATION LETTER', pageWidth / 2, titleY, { align: 'center' });
+      doc.text('2025 National Mathematics Summer Camp – AIMS Rwanda', pageWidth / 2, titleY, { align: 'center' });
       
       // Date - aligned to left margin
       doc.setFontSize(10);
@@ -169,22 +175,28 @@ const Campers = () => {
       // Greeting - aligned to left margin
       doc.setFontSize(12);
       const greetingY = dateY + 15;
-      doc.text(`Dear ${camper.name},`, leftMargin, greetingY);
+      doc.text(`Hello ${camper.name}`, leftMargin, greetingY);
+      doc.text(`Student at ${camper.school},`, leftMargin, greetingY + 7);
       
       // Body text - respecting margins with proper line wrapping
+      const sDate = camper.s_date || '[S_DATE]';
+      const eDate = camper.e_date || '[E_DATE]';
+      
       const bodyText = [
-        'Congratulations! You have been selected to participate in the Rwanda Mathematics Olympiad Training Camp 2025. This is a prestigious opportunity to enhance your mathematical skills and represent Rwanda in international competitions.',
+        'Congratulations on your outstanding performance in the Rwanda Mathematics Competitions, let alone Round 3. You have been selected to attend the 2025 National Mathematics Summer Camp at AIMS Rwanda, thanks to your hard work and exceptional problem-solving skills.',
         '',
-        'Camp Details:',
-        '• Duration: 2 weeks intensive training',
-        '• Location: To be confirmed',
-        '• Activities: Advanced problem solving, competition preparation',
-        '• Accommodation and meals provided',
+        `This year's selection process was highly competitive, and your achievement is truly commendable. We deeply appreciate your efforts and are excited to welcome you among the top math students in the country. This camp will happen at AIMS-Rwanda, Kigali, from ${sDate} to ${eDate}, and the arrival date is ${sDate} by 11:00 AM, Kigali time.`,
         '',
-        'Please confirm your attendance by responding to this invitation. We look forward to seeing you at the camp.'
+        'At the camp, you will come with one Math notebook and pens, no need for a calculator, bring casual personal and sports clothes, sport materials, any essential medications, and a reusable water bottle.',
+        '',
+        'We will provide accommodation, meals, training materials, and full support during the camp. Be ready to challenge yourself, work with peers, and grow as a mathematician.',
+        '',
+        'If you have any questions, feel free to contact Theoneste at theoneste.sanzabarinda@aims.ac.rw or via WhatsApp 0780850611. Every student should confirm their attendance three days before the camp day.',
+        '',
+        'We look forward to welcoming you to the Rwanda Olympiad community!'
       ];
       
-      let yPosition = greetingY + 15;
+      let yPosition = greetingY + 20;
       const lineHeight = 6;
       
       bodyText.forEach(line => {
@@ -193,31 +205,20 @@ const Campers = () => {
           return;
         }
         
-        if (line.startsWith('•')) {
-          // Bullet points - slightly indented
-          const bulletLines = doc.splitTextToSize(line, contentWidth - 10);
-          bulletLines.forEach((bulletLine: string) => {
-            doc.text(bulletLine, leftMargin + 5, yPosition);
-            yPosition += lineHeight;
-          });
-        } else if (line === 'Camp Details:') {
-          // Section header
-          doc.setFont('helvetica', 'bold');
-          doc.text(line, leftMargin, yPosition);
-          doc.setFont('helvetica', 'normal');
+        // Regular paragraph text - justified within margins
+        const wrappedLines = doc.splitTextToSize(line, contentWidth);
+        wrappedLines.forEach((wrappedLine: string) => {
+          doc.text(wrappedLine, leftMargin, yPosition);
           yPosition += lineHeight;
-        } else {
-          // Regular paragraph text - justified within margins
-          const wrappedLines = doc.splitTextToSize(line, contentWidth);
-          wrappedLines.forEach((wrappedLine: string) => {
-            doc.text(wrappedLine, leftMargin, yPosition);
-            yPosition += lineHeight;
-          });
-        }
+        });
       });
       
       // Closing and signature section
       yPosition += 10; // Extra space before closing
+      
+      // Closing text
+      doc.text('Warm regards,', leftMargin, yPosition);
+      yPosition += 10;
       
       // Add signature image aligned to left margin
       const signatureWidth = 45; // 1.5 units (adjustable)
@@ -235,27 +236,30 @@ const Campers = () => {
       doc.setFontSize(10);
       
       const signerDetails = [
-        'Best Regards,',
-        '',
-        'Dr. [Name]',
-        'Director',
-        'African Institute for Mathematical Sciences Rwanda'
+        'Obed Nsanzimfura',
+        'Rwanda Olympiad Program, Program Manager',
+        'African Institute for Mathematical Sciences (AIMS), Rwanda'
       ];
       
       let signerY = signerDetailsY;
       signerDetails.forEach(detail => {
-        if (detail === '') {
-          signerY += 4;
-        } else {
-          doc.text(detail, leftMargin, signerY);
-          signerY += 5;
-        }
+        doc.text(detail, leftMargin, signerY);
+        signerY += 5;
       });
       
-      // Footer with page number - centered at bottom
+      // Footer with contact information - centered at bottom
       doc.setFontSize(8);
       doc.setTextColor(128, 128, 128); // Subtle gray color
-      doc.text('Rwanda Mathematics Olympiad | Page 1', pageWidth / 2, 280, { align: 'center' });
+      const footerText = [
+        'African Institute for Mathematical Sciences (AIMS), Rwanda',
+        'Address: KG 3 Ave, Kigali, Rwanda | Website: www.aims.ac.rw | Email: matholympiad@aims.ac.rw'
+      ];
+      
+      let footerY = 270;
+      footerText.forEach(line => {
+        doc.text(line, pageWidth / 2, footerY, { align: 'center' });
+        footerY += 4;
+      });
       
       // Reset text color for next document
       doc.setTextColor(0, 0, 0);
@@ -324,9 +328,35 @@ const Campers = () => {
           {searchTerm && ` (filtered from ${campers.length} total)`}
         </div>
 
-        {/* Campers Table */}
+        {/* Campers Table with improved styling */}
         <div className="bg-white rounded-lg shadow overflow-hidden">
-          <Table>
+          <style>{`
+            .improved-table {
+              border-collapse: collapse;
+              width: 100%;
+            }
+            .improved-table th {
+              background-color: #00A46C;
+              color: white;
+              padding: 10px;
+              text-align: left;
+              font-weight: bold;
+            }
+            .improved-table td {
+              padding: 10px;
+              border-bottom: 1px solid #ddd;
+            }
+            .improved-table tr:nth-child(odd) td {
+              background-color: #ffffff;
+            }
+            .improved-table tr:nth-child(even) td {
+              background-color: #e2f2f2;
+            }
+            .improved-table tr:hover td {
+              background-color: #d4edda;
+            }
+          `}</style>
+          <Table className="improved-table">
             <TableHeader>
               <TableRow>
                 <TableHead className="w-12">
