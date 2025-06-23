@@ -150,7 +150,7 @@ const Campers = () => {
 
       // Document title - centered below logo
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(13);
+      doc.setFontSize(12);
       const titleY = logoY + logoHeight + 15;
       doc.text('2025 National Mathematics Summer Camp – AIMS Rwanda', pageWidth / 2, titleY, {
         align: 'center'
@@ -166,7 +166,7 @@ const Campers = () => {
       const dateY = titleY + 0;// this just added because I commented above one
 
       // Greeting - aligned to left margin
-      doc.setFontSize(10);
+      doc.setFontSize(11);
       doc.setFont('helvetica', 'normal');
       const greetingY = dateY + 15;
       doc.text(`Hello ${camper.name}`, leftMargin, greetingY);
@@ -201,7 +201,7 @@ const Campers = () => {
 
       // Add signature image aligned to left margin
       const signatureWidth = 45; // 1.5 units (adjustable)
-      const signatureHeight = 15; // 0.5 units (adjustable)
+      const signatureHeight = 14; // 0.5 units (adjustable)
       const signatureY = yPosition;
       try {
         doc.addImage('/lovable-uploads/a1bc53f6-4c31-434f-863c-635ccb3dc5ed.png', 'PNG', leftMargin, signatureY, signatureWidth, signatureHeight);
@@ -211,7 +211,7 @@ const Campers = () => {
 
       // Signer details below signature - aligned to left margin
       const signerDetailsY = signatureY + signatureHeight + 5;
-      doc.setFontSize(10);
+      doc.setFontSize(11);
       const signerDetails = ['Obed Nsanzimfura', 'Rwanda Olympiad Program, Program Manager', 'African Institute for Mathematical Sciences (AIMS), Rwanda'];
       let signerY = signerDetailsY;
       signerDetails.forEach(detail => {
