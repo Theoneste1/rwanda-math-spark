@@ -252,7 +252,7 @@ const Campers = () => {
   }
   return <div className="min-h-screen bg-gray-50 pt-16">
       <div className="max-w-6xl mx-auto px-4 py-8">
-        <h1 className="px-0 text-accent-foreground from-blue-800 text-gray-800 font-medium">RWANDA OLYMPIAD SUMMER 2025</h1>
+        <h1 className="px-0 text-accent-foreground from-blue-800 text-gray-800 font-medium text-center">RWANDA OLYMPIAD SUMMER CAMP 2025</h1>
         
         {/* Search and Actions */}
         <div className="mb-6 flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
