@@ -1,73 +1,108 @@
-# Welcome to your Lovable project
 
-## Project info
+# Rwanda Mathematics Olympiad Website
+
+A comprehensive website for the Rwanda Mathematics Olympiad program, showcasing our mission to identify and nurture Rwanda's top mathematics talent through rigorous competition and comprehensive training programs.
+
+## Project Info
 
 **URL**: https://lovable.dev/projects/16ba45a9-b89e-4d2a-b3d2-53be5413b814
 
-## How can I edit this code?
+## Technologies Used
 
-There are several ways of editing your application.
+This project is built with:
+- React 18
+- TypeScript
+- Vite
+- Tailwind CSS
+- shadcn/ui components
+- React Router for navigation
+- React Query for data fetching
 
-**Use Lovable**
+## Local Development
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/16ba45a9-b89e-4d2a-b3d2-53be5413b814) and start prompting.
+### Prerequisites
+- Node.js & npm installed ([install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating))
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+### Setup Instructions
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
+# Clone the repository
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
+# Navigate to the project directory
 cd <YOUR_PROJECT_NAME>
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Install dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start the development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Deployment on Netlify
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Option 1: Connect GitHub Repository (Recommended)
 
-**Use GitHub Codespaces**
+1. Push your code to a GitHub repository
+2. Go to [Netlify](https://netlify.com) and sign up/login
+3. Click "New site from Git"
+4. Connect your GitHub account and select your repository
+5. Configure build settings:
+   - **Build command**: `npm run build`
+   - **Publish directory**: `dist`
+6. Click "Deploy site"
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Netlify will automatically:
+- Install dependencies
+- Build your React app
+- Deploy to a custom URL
+- Handle React Router redirects (thanks to the `_redirects` file)
+- Auto-deploy when you push changes to GitHub
 
-## What technologies are used for this project?
+### Option 2: Manual Deploy
 
-This project is built with:
+1. Build your project locally:
+   ```sh
+   npm run build
+   ```
+2. Go to [Netlify](https://netlify.com)
+3. Drag and drop the `dist` folder to the deploy area
+4. Your site will be live with a random URL
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Custom Domain
 
-## How can I deploy this project?
+To connect a custom domain:
+1. Go to your Netlify site dashboard
+2. Click "Domain settings"
+3. Click "Add custom domain"
+4. Follow the DNS configuration instructions
 
-Simply open [Lovable](https://lovable.dev/projects/16ba45a9-b89e-4d2a-b3d2-53be5413b814) and click on Share -> Publish.
+## Features
 
-## Can I connect a custom domain to my Lovable project?
+- **Home Page**: Overview of the Rwanda Mathematics Olympiad
+- **About**: Information about our mission and programs
+- **Impact**: Statistics and success stories
+- **Team**: Meet our dedicated team members
+- **Competition Results**: View past competition results
+- **Summer Camp**: Manage campers and generate invitation letters
+- **Get Involved**: Information for participants and supporters
+- **Contact**: Get in touch with the organization
 
-Yes, you can!
+## Project Structure
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+```
+src/
+├── components/          # Reusable UI components
+├── pages/              # Route components
+├── hooks/              # Custom React hooks
+├── lib/                # Utility functions
+└── App.tsx             # Main application component
+```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+## Environment Variables
+
+No environment variables are required for basic functionality. The app fetches data from Google Sheets using public URLs.
+
+## Support
+
+For questions or issues, please contact the Rwanda Mathematics Olympiad team through the contact page on the website.
