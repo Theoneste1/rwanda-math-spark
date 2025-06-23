@@ -24,7 +24,7 @@ const Navigation = () => {
       path: "/competitions",
       submenu: [
         { name: "Campers", path: "/competitions/campers" },
-        { name: "Rwanda Mathematics competitions results", path: "/competitions/results" }
+        { name: "Competitions", path: "/competitions/results" }
       ]
     },
     { name: "Get Involved", path: "/get-involved" },
@@ -47,7 +47,7 @@ const Navigation = () => {
             <img 
               src="/lovable-uploads/b075c570-24b9-4af5-9c85-ee3ca13412df.png" 
               alt="Rwanda Mathematics Olympiad" 
-              className="h-10 w-auto"
+              className="h-20 w-auto"
             />
           </Link>
 

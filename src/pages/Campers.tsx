@@ -138,33 +138,36 @@ const Campers = () => {
 
       // Add Rwanda Mathematical Olympiad logo at the top center
       // Logo dimensions (adjustable)
-      const logoWidth = 70;
+      const logoWidth = 100;
       const logoHeight = 20;
       const logoX = (pageWidth - logoWidth) / 2; // Center horizontally
       const logoY = 20;
       try {
-        doc.addImage('/lovable-uploads/b075c570-24b9-4af5-9c85-ee3ca13412df.png', 'PNG', logoX, logoY, logoWidth, logoHeight);
+        doc.addImage('/lovable-uploads/4b9719bb-905e-4daa-b406-6d19562edd83.png', 'PNG', logoX, logoY, logoWidth, logoHeight);
       } catch (error) {
         console.log('Logo image not loaded, continuing without logo');
       }
 
       // Document title - centered below logo
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(14);
+      doc.setFontSize(13);
       const titleY = logoY + logoHeight + 15;
       doc.text('2025 National Mathematics Summer Camp – AIMS Rwanda', pageWidth / 2, titleY, {
         align: 'center'
       });
 
       // Date - aligned to left margin
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'normal');
-      const currentDate = new Date().toLocaleDateString();
-      const dateY = titleY + 20;
-      doc.text(`Date: ${currentDate}`, leftMargin, dateY);
+      // doc.setFontSize(10);
+      // doc.setFont('helvetica', 'normal');
+      // const currentDate = new Date().toLocaleDateString();
+      // const dateY = titleY + 20;
+      // doc.text(`Date: ${currentDate}`, leftMargin, dateY);
+
+      const dateY = titleY + 0;// this just added because I commented above one
 
       // Greeting - aligned to left margin
-      doc.setFontSize(12);
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
       const greetingY = dateY + 15;
       doc.text(`Hello ${camper.name}`, leftMargin, greetingY);
       doc.text(`Student at ${camper.school},`, leftMargin, greetingY + 7);
@@ -172,9 +175,9 @@ const Campers = () => {
       // Body text - respecting margins with proper line wrapping
       const sDate = camper.s_date || '[S_DATE]';
       const eDate = camper.e_date || '[E_DATE]';
-      const bodyText = ['Congratulations on your outstanding performance in the Rwanda Mathematics Competitions, let alone Round 3. You have been selected to attend the 2025 National Mathematics Summer Camp at AIMS Rwanda, thanks to your hard work and exceptional problem-solving skills.', '', `This year's selection process was highly competitive, and your achievement is truly commendable. We deeply appreciate your efforts and are excited to welcome you among the top math students in the country. This camp will happen at AIMS-Rwanda, Kigali, from ${sDate} to ${eDate}, and the arrival date is ${sDate} by 11:00 AM, Kigali time.`, '', 'At the camp, you will come with one Math notebook and pens, no need for a calculator, bring casual personal and sports clothes, sport materials, any essential medications, and a reusable water bottle.', '', 'We will provide accommodation, meals, training materials, and full support during the camp. Be ready to challenge yourself, work with peers, and grow as a mathematician.', '', 'If you have any questions, feel free to contact Theoneste at theoneste.sanzabarinda@aims.ac.rw or via WhatsApp 0780850611. Every student should confirm their attendance three days before the camp day.', '', 'We look forward to welcoming you to the Rwanda Olympiad community!'];
+      const bodyText = ['Congratulations on your outstanding performance in the Rwanda Mathematics Competitions, let alone Round 3. You have been selected to attend the 2025 National Mathematics Summer Camp at AIMS Rwanda, thanks to your hard work and exceptional problem-solving skills.', '', `This year's selection process was highly competitive, and your achievement is truly commendable. We deeply appreciate your efforts and are excited to welcome you among the top math students in the country. This camp will happen at AIMS-Rwanda, Kigali, from ${sDate} to ${eDate}, and the arrival date is ${sDate} by 11:00 AM, Kigali time.`, '', 'At the camp, you will come with one Math notebook and pens, no need for a calculator, bring casual personal and sports clothes, sport materials, any essential medications, and a reusable water bottle.', '', 'We will provide accommodation, meals, training materials, and full support during the camp. Be ready to challenge yourself, work with peers, and grow as a mathematician.', '', `If you have any questions, feel free to contact Theoneste at theoneste.sanzabarinda@aims.ac.rw or via WhatsApp 0780850611. Every student should confirm their attendance 7 days before ${sDate} by joining the telegram channel called OLYMPIADSUMMERCAMP2025 and fill and sign the form letter that he will find there.`, '', 'We look forward to welcoming you to the Rwanda Olympiad community!'];
       let yPosition = greetingY + 20;
-      const lineHeight = 6;
+      const lineHeight = 5;
       bodyText.forEach(line => {
         if (line === '') {
           yPosition += lineHeight;
@@ -234,7 +237,7 @@ const Campers = () => {
       // Save the PDF
       doc.save(`${camper.name.replace(/\s+/g, '_')}_RMC2025_INVITATION.pdf`);
     });
-    alert(`Generated ${selectedCampers.size} invitation letters!`);
+    // alert(`Generated ${selectedCampers.size} invitation letters!`);
   };
   if (isLoading) {
     return <div className="min-h-screen bg-gray-50 pt-16">
