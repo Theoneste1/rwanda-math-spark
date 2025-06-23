@@ -136,14 +136,14 @@ const Campers = () => {
       const pageWidth = doc.internal.pageSize.getWidth();
       const contentWidth = pageWidth - leftMargin - rightMargin;
 
-      // Add AIMS logo at the top center
+      // Add Rwanda Mathematical Olympiad logo at the top center
       // Logo dimensions (adjustable)
       const logoWidth = 70;
       const logoHeight = 20;
       const logoX = (pageWidth - logoWidth) / 2; // Center horizontally
       const logoY = 20;
       try {
-        doc.addImage('/lovable-uploads/0116a245-86cb-4150-97eb-0cc44a3f25f1.png', 'PNG', logoX, logoY, logoWidth, logoHeight);
+        doc.addImage('/lovable-uploads/b075c570-24b9-4af5-9c85-ee3ca13412df.png', 'PNG', logoX, logoY, logoWidth, logoHeight);
       } catch (error) {
         console.log('Logo image not loaded, continuing without logo');
       }
