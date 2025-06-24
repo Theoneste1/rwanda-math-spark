@@ -1,0 +1,81 @@
+
+import React, { useState, useEffect } from 'react'
+import { useAuth } from '@/contexts/AuthContext'
+import { Problem } from '@/lib/supabase'
+import ProblemList from '@/components/competition/ProblemList'
+import ProblemFilters from '@/components/competition/ProblemFilters'
+import CreateProblemModal from '@/components/competition/CreateProblemModal'
+import { Button } from '@/components/ui/button'
+import { Plus } from 'lucide-react'
+import { toast } from 'react-hot-toast'
+
+const Competition = () => {
+  const { user } = useAuth()
+  const [problems, setProblems] = useState<Problem[]>([])
+  const [loading, setLoading] = useState(true)
+  const [showCreateModal, setShowCreateModal] = useState(false)
+  const [filters, setFilters] = useState({
+    topic: '',
+    difficulty: '',
+    privacy: 'Public',
+    search: ''
+  })
+
+  const loadProblems = async () => {
+    // This will be implemented with actual Supabase queries
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    loadProblems()
+  }, [filters])
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              Mathematics Competition
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-2">
+              Solve challenging problems and share your solutions
+            </p>
+          </div>
+          {user && (
+            <Button
+              onClick={() => setShowCreateModal(true)}
+              className="flex items-center gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              Create Problem
+            </Button>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="lg:col-span-1">
+            <ProblemFilters filters={filters} onFiltersChange={setFilters} />
+          </div>
+          <div className="lg:col-span-3">
+            <ProblemList 
+              problems={problems} 
+              loading={loading}
+              onProblemUpdate={loadProblems}
+            />
+          </div>
+        </div>
+
+        {showCreateModal && (
+          <CreateProblemModal
+            isOpen={showCreateModal}
+            onClose={() => setShowCreateModal(false)}
+            onProblemCreated={loadProblems}
+          />
+        )}
+      </div>
+    </div>
+  )
+}
+
+export default Competition

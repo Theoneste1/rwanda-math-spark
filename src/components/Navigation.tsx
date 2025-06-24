@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ChevronDown } from "lucide-react";
@@ -23,8 +22,9 @@ const Navigation = () => {
       name: "Competitions", 
       path: "/competitions",
       submenu: [
+        { name: "Competition Platform", path: "/competition" },
         { name: "Campers", path: "/competitions/campers" },
-        { name: "Competitions", path: "/competitions/results" }
+        { name: "Results", path: "/competitions/results" }
       ]
     },
     { name: "Get Involved", path: "/get-involved" },
