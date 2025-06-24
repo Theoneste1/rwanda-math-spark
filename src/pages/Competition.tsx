@@ -6,11 +6,11 @@ import ProblemList from '@/components/competition/ProblemList'
 import ProblemFilters from '@/components/competition/ProblemFilters'
 import CreateProblemModal from '@/components/competition/CreateProblemModal'
 import { Button } from '@/components/ui/button'
-import { Plus } from 'lucide-react'
+import { Plus, Database } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 
 const Competition = () => {
-  const { user } = useAuth()
+  const { user, isConfigured } = useAuth()
   const [problems, setProblems] = useState<Problem[]>([])
   const [loading, setLoading] = useState(true)
   const [showCreateModal, setShowCreateModal] = useState(false)
@@ -22,13 +22,38 @@ const Competition = () => {
   })
 
   const loadProblems = async () => {
-    // This will be implemented with actual Supabase queries
+    // This will be implemented with actual Supabase queries when configured
     setLoading(false)
   }
 
   useEffect(() => {
-    loadProblems()
-  }, [filters])
+    if (isConfigured) {
+      loadProblems()
+    } else {
+      setLoading(false)
+    }
+  }, [filters, isConfigured])
+
+  if (!isConfigured) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center py-12">
+            <Database className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+              Supabase Configuration Required
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
+              To use the competition platform, you need to configure your Supabase environment variables.
+            </p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment variables.
+            </p>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">

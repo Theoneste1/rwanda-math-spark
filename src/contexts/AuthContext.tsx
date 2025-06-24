@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { User } from '@supabase/supabase-js'
-import { supabase } from '@/lib/supabase'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
 
 interface AuthContextType {
@@ -12,6 +12,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>
   signOut: () => Promise<void>
   updateProfile: (updates: any) => Promise<void>
+  isConfigured: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -28,8 +29,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null)
   const [profile, setProfile] = useState<any | null>(null)
   const [loading, setLoading] = useState(true)
+  const isConfigured = isSupabaseConfigured()
 
   useEffect(() => {
+    if (!isConfigured || !supabase) {
+      setLoading(false)
+      return
+    }
+
     const getSession = async () => {
       const { data: { session } } = await supabase.auth.getSession()
       setUser(session?.user ?? null)
@@ -52,9 +59,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     })
 
     return () => subscription.unsubscribe()
-  }, [])
+  }, [isConfigured])
 
   const fetchProfile = async (userId: string) => {
+    if (!supabase) return
+    
     try {
       const { data, error } = await supabase
         .from('users')
@@ -70,6 +79,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }
 
   const signUp = async (email: string, password: string, username: string) => {
+    if (!supabase) {
+      toast.error('Supabase is not configured')
+      return
+    }
+
     try {
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -98,6 +112,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }
 
   const signIn = async (email: string, password: string) => {
+    if (!supabase) {
+      toast.error('Supabase is not configured')
+      return
+    }
+
     try {
       const { error } = await supabase.auth.signInWithPassword({
         email,
@@ -113,6 +132,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }
 
   const signOut = async () => {
+    if (!supabase) {
+      toast.error('Supabase is not configured')
+      return
+    }
+
     try {
       const { error } = await supabase.auth.signOut()
       if (error) throw error
@@ -124,6 +148,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }
 
   const updateProfile = async (updates: any) => {
+    if (!supabase) {
+      toast.error('Supabase is not configured')
+      return
+    }
+
     try {
       if (!user) throw new Error('No user logged in')
 
@@ -149,6 +178,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signIn,
     signOut,
     updateProfile,
+    isConfigured,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
