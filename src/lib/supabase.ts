@@ -1,13 +1,16 @@
 
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || ''
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || ''
+const supabaseUrl = 'https://kbohoyihfkdrhjckuosv.supabase.co'
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtib2hveWloZmtkcmhqY2t1b3N2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA4MDEwMDIsImV4cCI6MjA2NjM3NzAwMn0.AbKeDOr4Gf4LD-ds9MrGqj66FG9gdbUu4ztMCoXOlTQ'
 
-// Only create Supabase client if both URL and key are provided
-export const supabase = supabaseUrl && supabaseAnonKey 
-  ? createClient(supabaseUrl, supabaseAnonKey)
-  : null
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    storage: typeof window !== 'undefined' ? localStorage : undefined,
+    persistSession: true,
+    autoRefreshToken: true,
+  }
+})
 
 // Helper function to check if Supabase is configured
 export const isSupabaseConfigured = () => {

@@ -9,7 +9,206 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      answers: {
+        Row: {
+          content: string
+          created_at: string | null
+          creator_id: string
+          id: string
+          problem_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          creator_id: string
+          id?: string
+          problem_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          creator_id?: string
+          id?: string
+          problem_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "answers_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "answers_problem_id_fkey"
+            columns: ["problem_id"]
+            isOneToOne: false
+            referencedRelation: "problems"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      comments: {
+        Row: {
+          content: string
+          created_at: string | null
+          creator_id: string
+          id: string
+          parent_comment_id: string | null
+          problem_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          creator_id: string
+          id?: string
+          parent_comment_id?: string | null
+          problem_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          creator_id?: string
+          id?: string
+          parent_comment_id?: string | null
+          problem_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_parent_comment_id_fkey"
+            columns: ["parent_comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_problem_id_fkey"
+            columns: ["problem_id"]
+            isOneToOne: false
+            referencedRelation: "problems"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      problems: {
+        Row: {
+          content: string
+          created_at: string | null
+          creator_id: string
+          deleted_at: string | null
+          difficulty: string | null
+          id: string
+          images: string[] | null
+          privacy: string | null
+          suggested_answer: string | null
+          title: string
+          topic: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          creator_id: string
+          deleted_at?: string | null
+          difficulty?: string | null
+          id?: string
+          images?: string[] | null
+          privacy?: string | null
+          suggested_answer?: string | null
+          title: string
+          topic?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          creator_id?: string
+          deleted_at?: string | null
+          difficulty?: string | null
+          id?: string
+          images?: string[] | null
+          privacy?: string | null
+          suggested_answer?: string | null
+          title?: string
+          topic?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "problems_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reactions: {
+        Row: {
+          created_at: string | null
+          creator_id: string
+          emoji: string | null
+          id: string
+          target_id: string
+          target_type: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          creator_id: string
+          emoji?: string | null
+          id?: string
+          target_id: string
+          target_type?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          creator_id?: string
+          emoji?: string | null
+          id?: string
+          target_id?: string
+          target_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reactions_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          profile_image_url: string | null
+          username: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id: string
+          profile_image_url?: string | null
+          username: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          profile_image_url?: string | null
+          username?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

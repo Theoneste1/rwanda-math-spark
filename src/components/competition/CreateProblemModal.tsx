@@ -1,101 +1,92 @@
 
 import React, { useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
-import { supabase } from '@/lib/supabase'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Problem } from '@/lib/supabase'
 import { toast } from 'react-hot-toast'
 
 interface CreateProblemModalProps {
   isOpen: boolean
   onClose: () => void
   onProblemCreated: () => void
+  onSubmit: (problemData: Omit<Problem, 'id' | 'created_at' | 'updated_at' | 'creator'>) => void
 }
 
 const CreateProblemModal: React.FC<CreateProblemModalProps> = ({
   isOpen,
   onClose,
-  onProblemCreated
+  onProblemCreated,
+  onSubmit
 }) => {
   const { user } = useAuth()
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     title: '',
     content: '',
-    topic: '',
-    difficulty: '',
-    privacy: 'Public',
+    topic: 'Combinatorics' as Problem['topic'],
+    difficulty: 'Juniors' as Problem['difficulty'],
+    privacy: 'Public' as Problem['privacy'],
     suggested_answer: ''
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!user) return
+    
+    if (!user) {
+      toast.error('You must be logged in to create a problem')
+      return
+    }
+
+    if (!formData.title || !formData.content) {
+      toast.error('Please fill in all required fields')
+      return
+    }
 
     setLoading(true)
     try {
-      const { error } = await supabase
-        .from('problems')
-        .insert({
-          ...formData,
-          creator_id: user.id
-        })
-
-      if (error) throw error
-
-      toast.success('Problem created successfully!')
-      onProblemCreated()
-      onClose()
+      await onSubmit({
+        ...formData,
+        creator_id: user.id,
+        images: [],
+        deleted_at: undefined
+      })
+      
       setFormData({
         title: '',
         content: '',
-        topic: '',
-        difficulty: '',
+        topic: 'Combinatorics',
+        difficulty: 'Juniors',
         privacy: 'Public',
         suggested_answer: ''
       })
-    } catch (error: any) {
-      toast.error(error.message)
+      onProblemCreated()
+    } catch (error) {
+      console.error('Error creating problem:', error)
     } finally {
       setLoading(false)
     }
   }
 
-  const updateFormData = (key: string, value: string) => {
-    setFormData({ ...formData, [key]: value })
-  }
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>Create New Problem</DialogTitle>
         </DialogHeader>
-
+        
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="title">Title</Label>
+            <Label htmlFor="title">Title *</Label>
             <Input
               id="title"
               value={formData.title}
-              onChange={(e) => updateFormData('title', e.target.value)}
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               placeholder="Enter problem title"
-              required
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="content">Problem Content</Label>
-            <Textarea
-              id="content"
-              value={formData.content}
-              onChange={(e) => updateFormData('content', e.target.value)}
-              placeholder="Enter problem content (LaTeX supported)"
-              rows={6}
               required
             />
           </div>
@@ -103,9 +94,12 @@ const CreateProblemModal: React.FC<CreateProblemModalProps> = ({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="topic">Topic</Label>
-              <Select value={formData.topic} onValueChange={(value) => updateFormData('topic', value)}>
+              <Select 
+                value={formData.topic} 
+                onValueChange={(value: Problem['topic']) => setFormData({ ...formData, topic: value })}
+              >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select topic" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Combinatorics">Combinatorics</SelectItem>
@@ -118,9 +112,12 @@ const CreateProblemModal: React.FC<CreateProblemModalProps> = ({
 
             <div>
               <Label htmlFor="difficulty">Difficulty</Label>
-              <Select value={formData.difficulty} onValueChange={(value) => updateFormData('difficulty', value)}>
+              <Select 
+                value={formData.difficulty} 
+                onValueChange={(value: Problem['difficulty']) => setFormData({ ...formData, difficulty: value })}
+              >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select difficulty" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Juniors">Juniors</SelectItem>
@@ -134,7 +131,10 @@ const CreateProblemModal: React.FC<CreateProblemModalProps> = ({
 
           <div>
             <Label htmlFor="privacy">Privacy</Label>
-            <Select value={formData.privacy} onValueChange={(value) => updateFormData('privacy', value)}>
+            <Select 
+              value={formData.privacy} 
+              onValueChange={(value: Problem['privacy']) => setFormData({ ...formData, privacy: value })}
+            >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -146,13 +146,25 @@ const CreateProblemModal: React.FC<CreateProblemModalProps> = ({
           </div>
 
           <div>
+            <Label htmlFor="content">Problem Content *</Label>
+            <Textarea
+              id="content"
+              value={formData.content}
+              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+              placeholder="Enter the problem statement..."
+              rows={6}
+              required
+            />
+          </div>
+
+          <div>
             <Label htmlFor="suggested_answer">Suggested Answer (Optional)</Label>
             <Textarea
               id="suggested_answer"
               value={formData.suggested_answer}
-              onChange={(e) => updateFormData('suggested_answer', e.target.value)}
-              placeholder="Enter suggested answer"
-              rows={3}
+              onChange={(e) => setFormData({ ...formData, suggested_answer: e.target.value })}
+              placeholder="Enter your suggested solution..."
+              rows={4}
             />
           </div>
 

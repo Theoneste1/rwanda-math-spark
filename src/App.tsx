@@ -15,6 +15,7 @@ import TeamMember from "./pages/TeamMember";
 import Campers from "./pages/Campers";
 import CompetitionResults from "./pages/CompetitionResults";
 import Competition from "./pages/Competition";
+import Auth from "./pages/Auth";
 import GetInvolved from "./pages/GetInvolved";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
@@ -39,6 +40,7 @@ const App = () => (
               <Route path="/competitions/campers" element={<Campers />} />
               <Route path="/competitions/results" element={<CompetitionResults />} />
               <Route path="/competition" element={<Competition />} />
+              <Route path="/auth" element={<Auth />} />
               <Route path="/get-involved" element={<GetInvolved />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="*" element={<NotFound />} />

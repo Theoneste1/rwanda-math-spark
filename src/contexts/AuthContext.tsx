@@ -37,7 +37,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return
     }
 
-    const getSession = async () => {
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      setUser(session?.user ?? null)
+      if (session?.user) {
+        // Use setTimeout to avoid potential deadlocks
+        setTimeout(() => {
+          fetchProfile(session.user.id)
+        }, 0)
+      } else {
+        setProfile(null)
+      }
+      setLoading(false)
+    })
+
+    // Get initial session
+    const getInitialSession = async () => {
       const { data: { session } } = await supabase.auth.getSession()
       setUser(session?.user ?? null)
       if (session?.user) {
@@ -46,17 +61,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setLoading(false)
     }
 
-    getSession()
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      setUser(session?.user ?? null)
-      if (session?.user) {
-        await fetchProfile(session.user.id)
-      } else {
-        setProfile(null)
-      }
-      setLoading(false)
-    })
+    getInitialSession()
 
     return () => subscription.unsubscribe()
   }, [isConfigured])
@@ -71,7 +76,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .eq('id', userId)
         .single()
 
-      if (error) throw error
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error fetching profile:', error)
+        return
+      }
+      
       setProfile(data)
     } catch (error) {
       console.error('Error fetching profile:', error)
@@ -85,28 +94,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     try {
+      const redirectUrl = `${window.location.origin}/competition`
+      
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          emailRedirectTo: redirectUrl,
+          data: {
+            username
+          }
+        }
       })
 
       if (error) throw error
 
-      if (data.user) {
-        // Create user profile
-        const { error: profileError } = await supabase
-          .from('users')
-          .insert({
-            id: data.user.id,
-            username,
-            email,
-          })
-
-        if (profileError) throw profileError
+      if (data.user && !data.user.email_confirmed_at) {
+        toast.success('Please check your email to confirm your account!')
+      } else {
         toast.success('Account created successfully!')
       }
     } catch (error: any) {
-      toast.error(error.message)
+      if (error.message.includes('already registered')) {
+        toast.error('An account with this email already exists')
+      } else {
+        toast.error(error.message)
+      }
       throw error
     }
   }
@@ -126,7 +139,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (error) throw error
       toast.success('Signed in successfully!')
     } catch (error: any) {
-      toast.error(error.message)
+      if (error.message.includes('Invalid login credentials')) {
+        toast.error('Invalid email or password')
+      } else {
+        toast.error(error.message)
+      }
       throw error
     }
   }

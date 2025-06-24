@@ -1,18 +1,16 @@
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
-import { Problem } from '@/lib/supabase'
+import { useProblems } from '@/hooks/useProblems'
 import ProblemList from '@/components/competition/ProblemList'
 import ProblemFilters from '@/components/competition/ProblemFilters'
 import CreateProblemModal from '@/components/competition/CreateProblemModal'
 import { Button } from '@/components/ui/button'
-import { Plus, Database } from 'lucide-react'
-import { toast } from 'react-hot-toast'
+import { Plus, Database, LogIn } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 const Competition = () => {
   const { user, isConfigured } = useAuth()
-  const [problems, setProblems] = useState<Problem[]>([])
-  const [loading, setLoading] = useState(true)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [filters, setFilters] = useState({
     topic: '',
@@ -21,18 +19,11 @@ const Competition = () => {
     search: ''
   })
 
-  const loadProblems = async () => {
-    // This will be implemented with actual Supabase queries when configured
-    setLoading(false)
-  }
+  const { problems, isLoading, createProblem } = useProblems(filters)
 
-  useEffect(() => {
-    if (isConfigured) {
-      loadProblems()
-    } else {
-      setLoading(false)
-    }
-  }, [filters, isConfigured])
+  const handleProblemCreated = () => {
+    setShowCreateModal(false)
+  }
 
   if (!isConfigured) {
     return (
@@ -67,15 +58,25 @@ const Competition = () => {
               Solve challenging problems and share your solutions
             </p>
           </div>
-          {user && (
-            <Button
-              onClick={() => setShowCreateModal(true)}
-              className="flex items-center gap-2"
-            >
-              <Plus className="h-4 w-4" />
-              Create Problem
-            </Button>
-          )}
+          <div className="flex items-center gap-4">
+            {!user && (
+              <Link to="/auth">
+                <Button variant="outline" className="flex items-center gap-2">
+                  <LogIn className="h-4 w-4" />
+                  Sign In
+                </Button>
+              </Link>
+            )}
+            {user && (
+              <Button
+                onClick={() => setShowCreateModal(true)}
+                className="flex items-center gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                Create Problem
+              </Button>
+            )}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -85,8 +86,8 @@ const Competition = () => {
           <div className="lg:col-span-3">
             <ProblemList 
               problems={problems} 
-              loading={loading}
-              onProblemUpdate={loadProblems}
+              loading={isLoading}
+              onProblemUpdate={() => {}}
             />
           </div>
         </div>
@@ -95,7 +96,8 @@ const Competition = () => {
           <CreateProblemModal
             isOpen={showCreateModal}
             onClose={() => setShowCreateModal(false)}
-            onProblemCreated={loadProblems}
+            onProblemCreated={handleProblemCreated}
+            onSubmit={createProblem}
           />
         )}
       </div>
