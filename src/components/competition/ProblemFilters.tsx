@@ -17,7 +17,9 @@ interface ProblemFiltersProps {
 
 const ProblemFilters: React.FC<ProblemFiltersProps> = ({ filters, onFiltersChange }) => {
   const updateFilter = (key: string, value: string) => {
-    onFiltersChange({ ...filters, [key]: value })
+    // Convert "all" values back to empty strings for the actual filter
+    const filterValue = value === 'all' ? '' : value
+    onFiltersChange({ ...filters, [key]: filterValue })
   }
 
   return (
@@ -39,12 +41,12 @@ const ProblemFilters: React.FC<ProblemFiltersProps> = ({ filters, onFiltersChang
 
         <div>
           <Label htmlFor="topic">Topic</Label>
-          <Select value={filters.topic} onValueChange={(value) => updateFilter('topic', value)}>
+          <Select value={filters.topic || 'all'} onValueChange={(value) => updateFilter('topic', value)}>
             <SelectTrigger>
               <SelectValue placeholder="All topics" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All topics</SelectItem>
+              <SelectItem value="all">All topics</SelectItem>
               <SelectItem value="Combinatorics">Combinatorics</SelectItem>
               <SelectItem value="Number Theory">Number Theory</SelectItem>
               <SelectItem value="Geometry">Geometry</SelectItem>
@@ -55,12 +57,12 @@ const ProblemFilters: React.FC<ProblemFiltersProps> = ({ filters, onFiltersChang
 
         <div>
           <Label htmlFor="difficulty">Difficulty</Label>
-          <Select value={filters.difficulty} onValueChange={(value) => updateFilter('difficulty', value)}>
+          <Select value={filters.difficulty || 'all'} onValueChange={(value) => updateFilter('difficulty', value)}>
             <SelectTrigger>
               <SelectValue placeholder="All difficulties" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All difficulties</SelectItem>
+              <SelectItem value="all">All difficulties</SelectItem>
               <SelectItem value="Juniors">Juniors</SelectItem>
               <SelectItem value="Seniors">Seniors</SelectItem>
               <SelectItem value="PAMO">PAMO</SelectItem>
