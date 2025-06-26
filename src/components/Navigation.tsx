@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ChevronDown } from "lucide-react";
@@ -45,9 +46,9 @@ const Navigation = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center">
             <img 
-              src="/lovable-uploads/b075c570-24b9-4af5-9c85-ee3ca13412df.png" 
+              src="/lovable-uploads/0115baec-ea29-4a53-b52e-009316b8fed0.png" 
               alt="Rwanda Mathematics Olympiad" 
-              className="h-20 w-auto"
+              className="h-12 w-auto"
             />
           </Link>
 
