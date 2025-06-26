@@ -11,7 +11,6 @@ interface LayoutProps {
 // Main layout component that wraps all pages
 const Layout = ({ children }: LayoutProps) => {
   return (
-    {/* Main container with full height and flex layout */}
     <div className="min-h-screen flex flex-col">
       {/* Navigation header - always visible at top */}
       <Navigation />

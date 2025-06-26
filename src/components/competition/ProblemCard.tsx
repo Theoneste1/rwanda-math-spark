@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { Link } from 'react-router-dom'
 // Import Problem type and UI components
@@ -37,7 +36,6 @@ const ProblemCard: React.FC<ProblemCardProps> = ({ problem }) => {
   }
 
   return (
-    {/* Main problem card with hover effect */}
     <Card className="hover:shadow-md transition-shadow">
       <CardHeader className="pb-3">
         <div className="flex justify-between items-start">

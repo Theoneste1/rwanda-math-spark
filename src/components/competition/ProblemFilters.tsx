@@ -1,4 +1,3 @@
-
 import React from 'react'
 // Import UI components
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -28,7 +27,6 @@ const ProblemFilters: React.FC<ProblemFiltersProps> = ({ filters, onFiltersChang
   }
 
   return (
-    {/* Filter panel card */}
     <Card>
       <CardHeader>
         <CardTitle>Filters</CardTitle>
