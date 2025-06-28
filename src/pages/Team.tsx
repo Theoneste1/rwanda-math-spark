@@ -1,8 +1,18 @@
 
+import React, { useState } from 'react';
 import { Link } from "react-router-dom";
-import { Mail, Linkedin } from "lucide-react";
+import { Mail, Linkedin, ChevronDown } from "lucide-react";
 
+/**
+ * Team page component with expandable team member display
+ * Purpose: Show team members with top 3 displayed by default and option to view all
+ * Features: Hover effects on images, expandable view, responsive grid layout
+ */
 const Team = () => {
+  // State to control whether all team members are shown
+  const [showAll, setShowAll] = useState<boolean>(false);
+
+  // Team member data with enhanced information
   const teamMembers = [
     {
       name: "Alice Uwase",
@@ -10,6 +20,7 @@ const Team = () => {
       slug: "alice-uwase",
       image: "https://images.unsplash.com/photo-1494790108755-2616b332c108?w=400&h=400&fit=crop&crop=face",
       description: "Coordinates national training camps and manages student development programs.",
+      priority: 1 // Top team member
     },
     {
       name: "Boris Habimana",
@@ -17,6 +28,7 @@ const Team = () => {
       slug: "boris-habimana",
       image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
       description: "Designs curriculum and leads advanced mathematical training sessions.",
+      priority: 2 // Top team member
     },
     {
       name: "Claudine Mutesi",
@@ -24,6 +36,7 @@ const Team = () => {
       slug: "claudine-mutesi",
       image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face",
       description: "Manages community outreach and partnerships with schools across Rwanda.",
+      priority: 3 // Top team member
     },
     {
       name: "Emmanuel Nshimiyimana",
@@ -31,6 +44,7 @@ const Team = () => {
       slug: "emmanuel-nshimiyimana",
       image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
       description: "Handles operations, logistics, and administrative coordination.",
+      priority: 4
     },
     {
       name: "Theoneste Nsanzabarinda",
@@ -38,6 +52,7 @@ const Team = () => {
       slug: "theoneste-nsanzabarinda",
       image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=face",
       description: "Theoneste is a computer science graduate from African Leadership University and a Millennium Fellow. He supports the Rwanda Mathematics Olympiad as a Program Support Officer and is passionate about mentoring students and problem-solving.",
+      priority: 5
     },
     {
       name: "Obed Kor Nsanzimfura",
@@ -45,8 +60,19 @@ const Team = () => {
       slug: "obed-kor-nsanzimfura",
       image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=face",
       description: "Obed Kor Nsanzimfura manages the Rwanda Mathematics Olympiad and has led Rwanda's teams to international math competitions like IMO and PAMO. He is also an experienced math coach and full-stack developer.",
+      priority: 6
     },
   ];
+
+  // Determine which team members to display based on showAll state
+  const displayedMembers = showAll ? teamMembers : teamMembers.slice(0, 3);
+
+  /**
+   * Toggles the display between top 3 and all team members
+   */
+  const toggleShowAll = () => {
+    setShowAll(!showAll);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -63,28 +89,49 @@ const Team = () => {
       {/* Team Grid */}
       <section className="py-20">
         <div className="max-w-6xl mx-auto px-4">
+          {/* Section Header with Member Count */}
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">
+              {showAll ? 'Our Complete Team' : 'Leadership Team'}
+            </h2>
+            <p className="text-gray-600">
+              {showAll 
+                ? `Meet all ${teamMembers.length} members of our dedicated team`
+                : 'Meet our core leadership team'
+              }
+            </p>
+          </div>
+
+          {/* Team Members Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {teamMembers.map((member, index) => (
+            {displayedMembers.map((member, index) => (
               <Link
                 key={index}
                 to={`/team/${member.slug}`}
                 className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 group"
               >
-                <div className="aspect-square overflow-hidden">
+                {/* Member Image with Hover Effect */}
+                <div className="aspect-square overflow-hidden relative">
                   <img
                     src={member.image}
                     alt={member.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    className="w-full h-full object-cover transition-all duration-300 filter grayscale group-hover:grayscale-0 group-hover:scale-110"
                   />
+                  {/* Overlay for better text visibility on hover */}
+                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300"></div>
                 </div>
+
+                {/* Member Information */}
                 <div className="p-6">
                   <h3 className="text-2xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors duration-200">
                     {member.name}
                   </h3>
                   <p className="text-blue-600 font-semibold mb-3">{member.role}</p>
                   <p className="text-gray-600 text-sm line-clamp-3">{member.description}</p>
+                  
+                  {/* View Profile Link */}
                   <div className="mt-4 flex items-center text-blue-600 font-semibold">
-                    <span>Full Profile</span>
+                    <span>View Full Profile</span>
                     <svg className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
@@ -93,14 +140,32 @@ const Team = () => {
               </Link>
             ))}
           </div>
+
+          {/* Show More/Less Button */}
+          <div className="text-center mt-12">
+            <button
+              onClick={toggleShowAll}
+              className="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 flex items-center mx-auto space-x-2"
+            >
+              <span>{showAll ? 'Show Less' : 'Find More'}</span>
+              <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${showAll ? 'rotate-180' : ''}`} />
+            </button>
+            <p className="text-gray-600 text-sm mt-2">
+              {showAll 
+                ? 'Showing all team members'
+                : `${teamMembers.length - 3} more team members available`
+              }
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* Team Values */}
+      {/* Team Values Section */}
       <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">Our Values</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Excellence Value */}
             <div className="text-center">
               <div className="bg-blue-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
                 <span className="text-3xl">🎯</span>
@@ -110,6 +175,8 @@ const Team = () => {
                 We strive for the highest standards in mathematical education and student development.
               </p>
             </div>
+
+            {/* Collaboration Value */}
             <div className="text-center">
               <div className="bg-green-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
                 <span className="text-3xl">🤝</span>
@@ -119,6 +186,8 @@ const Team = () => {
                 Working together with schools, communities, and international partners for greater impact.
               </p>
             </div>
+
+            {/* Equity Value */}
             <div className="text-center">
               <div className="bg-purple-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
                 <span className="text-3xl">⚖️</span>
