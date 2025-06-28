@@ -158,12 +158,12 @@ const Index = () => {
             who have been part of the Rwanda Mathematics Olympiad journey.
           </p>
           
-          {/* Horizontal scrolling carousel */}
+          {/* Manual-only carousel showing 2 stories at a time */}
           <Carousel 
             items={successStories} 
-            autoPlay={true} 
-            autoPlayInterval={6000}
+            autoPlay={false} // Disabled auto-scroll as requested
             showArrows={true}
+            itemsPerView={2} // Show 2 stories at a time as requested
             className="mb-8"
           />
         </div>

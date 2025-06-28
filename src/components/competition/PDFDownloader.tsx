@@ -29,7 +29,7 @@ interface PDFDownloaderProps {
 
 /**
  * PDFDownloader component for generating and downloading competition results as PDF
- * Purpose: Create clean, formatted PDF reports of student competition results
+ * Purpose: Create clean, formatted PDF reports of student competition results with enhanced styling
  */
 const PDFDownloader: React.FC<PDFDownloaderProps> = ({
   results,
@@ -39,89 +39,167 @@ const PDFDownloader: React.FC<PDFDownloaderProps> = ({
   /**
    * Generates and downloads PDF report of competition results
    * Creates a well-formatted PDF with header, school info, and results table
+   * Now includes ALL results across all pages with enhanced styling
    */
   const downloadPDF = () => {
     try {
       // Initialize jsPDF with A4 page size
       const doc = new jsPDF();
       const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
       
-      // PDF Header
-      doc.setFontSize(18);
+      // Colors for enhanced styling
+      const colors = {
+        primary: [41, 128, 185], // Blue
+        secondary: [52, 152, 219], // Light blue
+        success: [39, 174, 96], // Green
+        danger: [231, 76, 60], // Red
+        dark: [44, 62, 80], // Dark gray
+        light: [236, 240, 241], // Light gray
+        white: [255, 255, 255]
+      };
+      
+      let currentY = 20;
+      
+      // PDF Header with colored background
+      doc.setFillColor(...colors.primary);
+      doc.rect(0, 0, pageWidth, 40, 'F');
+      
+      doc.setTextColor(...colors.white);
+      doc.setFontSize(20);
       doc.setFont('helvetica', 'bold');
       doc.text('Rwanda Mathematics Olympiad', pageWidth / 2, 20, { align: 'center' });
       
-      doc.setFontSize(14);
-      doc.text(`JRMC2025 ${schoolInfo.round} Results`, pageWidth / 2, 30, { align: 'center' });
+      doc.setFontSize(16);
+      doc.text(`JRMC2025 ${schoolInfo.round} Results`, pageWidth / 2, 32, { align: 'center' });
       
-      // School Information Section
+      currentY = 60;
+      
+      // School Information Section with colored background
+      doc.setFillColor(...colors.light);
+      doc.rect(20, currentY - 10, pageWidth - 40, 40, 'F');
+      
+      doc.setTextColor(...colors.dark);
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.text('School Information', 25, currentY);
+      
       doc.setFontSize(12);
       doc.setFont('helvetica', 'normal');
+      doc.text(`School: ${schoolInfo.schoolName}`, 25, currentY + 12);
+      doc.text(`Teacher: ${schoolInfo.teacherName}`, 25, currentY + 24);
       
-      const schoolInfoY = 50;
-      doc.text(`School: ${schoolInfo.schoolName}`, 20, schoolInfoY);
-      doc.text(`Teacher: ${schoolInfo.teacherName}`, 20, schoolInfoY + 10);
-      doc.text(`Number of Students: ${schoolInfo.numberOfStudents}`, 20, schoolInfoY + 20);
-      doc.text(`Generated: ${new Date().toLocaleDateString()}`, 20, schoolInfoY + 30);
+      doc.text(`Number of Students: ${schoolInfo.numberOfStudents}`, pageWidth / 2 + 20, currentY + 12);
+      doc.text(`Generated: ${new Date().toLocaleDateString()}`, pageWidth / 2 + 20, currentY + 24);
       
-      // Results Table Header
-      const tableStartY = schoolInfoY + 50;
+      currentY += 60;
+      
+      // Results Table Header with colored styling
+      const tableStartY = currentY;
+      const rowHeight = 12;
+      const headerHeight = 15;
+      
+      // Header background
+      doc.setFillColor(...colors.secondary);
+      doc.rect(20, tableStartY - 5, pageWidth - 40, headerHeight, 'F');
+      
+      // Header text
+      doc.setTextColor(...colors.white);
       doc.setFont('helvetica', 'bold');
-      doc.text('#', 20, tableStartY);
-      doc.text('Student Name', 35, tableStartY);
-      doc.text('Gender', 100, tableStartY);
-      doc.text('Level', 130, tableStartY);
-      doc.text('Grade', 155, tableStartY);
-      doc.text('Decision', 175, tableStartY);
+      doc.setFontSize(11);
+      doc.text('#', 25, tableStartY + 5);
+      doc.text('Student Name', 40, tableStartY + 5);
+      doc.text('Gender', 105, tableStartY + 5);
+      doc.text('Level', 130, tableStartY + 5);
+      doc.text('Grade', 155, tableStartY + 5);
+      doc.text('Decision', 175, tableStartY + 5);
       
-      // Draw header line
-      doc.line(20, tableStartY + 3, pageWidth - 20, tableStartY + 3);
+      currentY = tableStartY + headerHeight + 5;
       
-      // Results Table Data
+      // Results Table Data with alternating row colors
       doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      
       results.forEach((result, index) => {
-        const rowY = tableStartY + 15 + (index * 10);
-        
         // Check if we need a new page
-        if (rowY > 270) {
+        if (currentY > pageHeight - 30) {
           doc.addPage();
+          currentY = 30;
+          
           // Repeat header on new page
+          doc.setFillColor(...colors.secondary);
+          doc.rect(20, currentY - 5, pageWidth - 40, headerHeight, 'F');
+          
+          doc.setTextColor(...colors.white);
           doc.setFont('helvetica', 'bold');
-          doc.text('#', 20, 30);
-          doc.text('Student Name', 35, 30);
-          doc.text('Gender', 100, 30);
-          doc.text('Level', 130, 30);
-          doc.text('Grade', 155, 30);
-          doc.text('Decision', 175, 30);
-          doc.line(20, 33, pageWidth - 20, 33);
-          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(11);
+          doc.text('#', 25, currentY + 5);
+          doc.text('Student Name', 40, currentY + 5);
+          doc.text('Gender', 105, currentY + 5);
+          doc.text('Level', 130, currentY + 5);
+          doc.text('Grade', 155, currentY + 5);
+          doc.text('Decision', 175, currentY + 5);
+          
+          currentY += headerHeight + 5;
         }
         
-        const currentY = rowY > 270 ? 45 + ((rowY - 285) % 250) : rowY;
+        // Alternating row backgrounds
+        if (index % 2 === 0) {
+          doc.setFillColor(...colors.light);
+          doc.rect(20, currentY - 3, pageWidth - 40, rowHeight, 'F');
+        }
         
-        doc.text((index + 1).toString(), 20, currentY);
-        doc.text(result['Student Name'] || '', 35, currentY);
-        doc.text(result['Gender'] || '', 100, currentY);
-        doc.text(result['Level'] || '', 130, currentY);
-        doc.text(result['Grade'] || '', 155, currentY);
-        doc.text(result['Decision'] || '', 175, currentY);
+        // Row text color based on decision
+        const decision = result['Decision'] || '';
+        if (decision.toLowerCase().includes('qualified')) {
+          doc.setTextColor(...colors.success);
+        } else if (decision.toLowerCase().includes('not')) {
+          doc.setTextColor(...colors.danger);
+        } else {
+          doc.setTextColor(...colors.dark);
+        }
+        
+        doc.text((index + 1).toString(), 25, currentY + 5);
+        doc.setTextColor(...colors.dark);
+        doc.text(result['Student Name'] || '', 40, currentY + 5);
+        doc.text(result['Gender'] || '', 105, currentY + 5);
+        doc.text(result['Level'] || '', 130, currentY + 5);
+        doc.text(result['Grade'] || '', 155, currentY + 5);
+        
+        // Decision with color coding
+        if (decision.toLowerCase().includes('qualified')) {
+          doc.setTextColor(...colors.success);
+        } else if (decision.toLowerCase().includes('not')) {
+          doc.setTextColor(...colors.danger);
+        } else {
+          doc.setTextColor(...colors.dark);
+        }
+        doc.text(decision, 175, currentY + 5);
+        
+        currentY += rowHeight;
       });
       
-      // Footer - Fixed the method call here
+      // Footer with colored background
       const totalPages = doc.getNumberOfPages();
       for (let i = 1; i <= totalPages; i++) {
         doc.setPage(i);
+        
+        // Footer background
+        doc.setFillColor(...colors.primary);
+        doc.rect(0, pageHeight - 20, pageWidth, 20, 'F');
+        
+        doc.setTextColor(...colors.white);
         doc.setFontSize(10);
         doc.text(
-          `Page ${i} of ${totalPages}`,
+          `Page ${i} of ${totalPages} | ${schoolInfo.schoolName} - ${schoolInfo.round}`,
           pageWidth / 2,
-          doc.internal.pageSize.getHeight() - 10,
+          pageHeight - 10,
           { align: 'center' }
         );
       }
       
       // Download the PDF
-      const fileName = `JRMC2025_${schoolInfo.round}_${schoolInfo.schoolName.replace(/\s+/g, '_')}.pdf`;
+      const fileName = `JRMC2025_${schoolInfo.round}_${schoolInfo.schoolName.replace(/\s+/g, '_')}_All_Results.pdf`;
       doc.save(fileName);
     } catch (error) {
       console.error('Error generating PDF:', error);
@@ -133,10 +211,10 @@ const PDFDownloader: React.FC<PDFDownloaderProps> = ({
     <button
       onClick={downloadPDF}
       className={`flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 ${className}`}
-      aria-label="Download results as PDF"
+      aria-label="Download all results as PDF"
     >
       <Download className="w-4 h-4 mr-2" />
-      Download PDF
+      Download All Results PDF
     </button>
   );
 };

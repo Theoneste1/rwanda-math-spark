@@ -1,202 +1,155 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-// Interface for carousel items
+// Interface for carousel item
 interface CarouselItem {
   id: string;
   name: string;
   role: string;
   quote: string;
-  image?: string;
+  image: string;
 }
 
-// Props interface for the Carousel component
+// Props interface for Carousel component
 interface CarouselProps {
   items: CarouselItem[];
   autoPlay?: boolean;
   autoPlayInterval?: number;
   showArrows?: boolean;
   className?: string;
+  itemsPerView?: number; // New prop for controlling how many items to show
 }
 
-// Reusable horizontal carousel component with touch support
+/**
+ * Reusable Carousel component for success stories
+ * Purpose: Display success stories in a horizontally scrollable format
+ * Features: Manual navigation, responsive design, customizable items per view
+ */
 const Carousel: React.FC<CarouselProps> = ({
   items,
-  autoPlay = false,
+  autoPlay = false, // Disabled by default for manual control
   autoPlayInterval = 5000,
   showArrows = true,
-  className = ""
+  className = "",
+  itemsPerView = 2 // Show 2 items by default as requested
 }) => {
-  // State for current slide index
-  const [currentIndex, setCurrentIndex] = useState(0);
-  // State for touch/drag handling
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [translateX, setTranslateX] = useState(0);
-  
-  // Ref for the carousel container
-  const carouselRef = useRef<HTMLDivElement>(null);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
-  // Auto-play functionality
-  useEffect(() => {
-    if (!autoPlay || isDragging) return;
-    
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % items.length);
-    }, autoPlayInterval);
+  // Calculate total slides based on items per view
+  const totalSlides = Math.ceil(items.length / itemsPerView);
+  const maxIndex = totalSlides - 1;
 
-    return () => clearInterval(interval);
-  }, [autoPlay, autoPlayInterval, isDragging, items.length]);
-
-  // Navigation functions
-  const goToPrevious = () => {
-    setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
+  /**
+   * Navigate to the next set of items
+   */
+  const nextSlide = () => {
+    setCurrentIndex(prevIndex => 
+      prevIndex >= maxIndex ? 0 : prevIndex + 1
+    );
   };
 
-  const goToNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % items.length);
+  /**
+   * Navigate to the previous set of items
+   */
+  const prevSlide = () => {
+    setCurrentIndex(prevIndex => 
+      prevIndex <= 0 ? maxIndex : prevIndex - 1
+    );
   };
 
-  // Touch event handlers for mobile swipe support
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setIsDragging(true);
-    setStartX(e.touches[0].clientX);
+  /**
+   * Get items for current slide
+   */
+  const getCurrentItems = () => {
+    const startIndex = currentIndex * itemsPerView;
+    const endIndex = startIndex + itemsPerView;
+    return items.slice(startIndex, endIndex);
   };
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging) return;
-    const currentX = e.touches[0].clientX;
-    const diff = startX - currentX;
-    setTranslateX(-diff);
-  };
+  // Don't render if no items
+  if (!items || items.length === 0) {
+    return null;
+  }
 
-  const handleTouchEnd = () => {
-    if (!isDragging) return;
-    
-    const threshold = 50; // Minimum swipe distance
-    if (Math.abs(translateX) > threshold) {
-      if (translateX > 0) {
-        goToNext();
-      } else {
-        goToPrevious();
-      }
-    }
-    
-    setIsDragging(false);
-    setStartX(0);
-    setTranslateX(0);
-  };
-
-  // Mouse event handlers for desktop drag support
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
-    setStartX(e.clientX);
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return;
-    const currentX = e.clientX;
-    const diff = startX - currentX;
-    setTranslateX(-diff);
-  };
-
-  const handleMouseUp = () => {
-    if (!isDragging) return;
-    
-    const threshold = 50;
-    if (Math.abs(translateX) > threshold) {
-      if (translateX > 0) {
-        goToNext();
-      } else {
-        goToPrevious();
-      }
-    }
-    
-    setIsDragging(false);
-    setStartX(0);
-    setTranslateX(0);
-  };
+  const currentItems = getCurrentItems();
 
   return (
-    <div className={`relative overflow-hidden ${className}`}>
-      {/* Carousel container */}
-      <div
-        ref={carouselRef}
-        className="flex transition-transform duration-300 ease-in-out"
-        style={{
-          transform: `translateX(-${currentIndex * 100}%) translateX(${isDragging ? translateX : 0}px)`
-        }}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-      >
-        {items.map((item) => (
-          <div key={item.id} className="w-full flex-shrink-0 px-4">
-            {/* Story card */}
-            <div className="bg-white rounded-lg shadow-lg p-8 mx-auto max-w-2xl">
-              <div className="flex items-center mb-6">
-                {/* Profile image */}
-                {item.image && (
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-16 h-16 rounded-full mr-4 object-cover"
-                  />
-                )}
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-800">{item.name}</h3>
-                  <p className="text-blue-600 font-medium">{item.role}</p>
+    <div className={`relative w-full ${className}`}>
+      {/* Carousel Container */}
+      <div className="overflow-hidden">
+        <div className="flex transition-transform duration-500 ease-in-out">
+          <div className={`grid ${itemsPerView === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'} gap-8 w-full flex-shrink-0`}>
+            {currentItems.map((item) => (
+              <div key={item.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <div className="p-8">
+                  {/* Profile Image */}
+                  <div className="flex items-center mb-6">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-16 h-16 rounded-full object-cover mr-4 border-4 border-blue-100"
+                    />
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-800">{item.name}</h3>
+                      <p className="text-blue-600 font-medium text-sm">{item.role}</p>
+                    </div>
+                  </div>
+                  
+                  {/* Quote */}
+                  <blockquote className="text-gray-700 italic leading-relaxed">
+                    "{item.quote}"
+                  </blockquote>
                 </div>
               </div>
-              {/* Quote */}
-              <p className="text-gray-700 text-lg italic leading-relaxed">
-                "{item.quote}"
-              </p>
-            </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
 
-      {/* Navigation arrows */}
-      {showArrows && items.length > 1 && (
+      {/* Navigation Arrows - Only show if there are multiple slides */}
+      {showArrows && totalSlides > 1 && (
         <>
           <button
-            onClick={goToPrevious}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white text-gray-800 rounded-full p-2 shadow-lg hover:bg-gray-50 transition-colors duration-200 z-10"
-            aria-label="Previous story"
+            onClick={prevSlide}
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-200 hover:bg-gray-50 z-10"
+            aria-label="Previous stories"
           >
-            <ChevronLeft className="w-6 h-6" />
+            <ChevronLeft className="w-6 h-6 text-gray-600" />
           </button>
+          
           <button
-            onClick={goToNext}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white text-gray-800 rounded-full p-2 shadow-lg hover:bg-gray-50 transition-colors duration-200 z-10"
-            aria-label="Next story"
+            onClick={nextSlide}
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-200 hover:bg-gray-50 z-10"
+            aria-label="Next stories"
           >
-            <ChevronRight className="w-6 h-6" />
+            <ChevronRight className="w-6 h-6 text-gray-600" />
           </button>
         </>
       )}
 
-      {/* Dot indicators */}
-      {items.length > 1 && (
-        <div className="flex justify-center mt-6 space-x-2">
-          {items.map((_, index) => (
+      {/* Slide Indicators - Only show if there are multiple slides */}
+      {totalSlides > 1 && (
+        <div className="flex justify-center mt-8 space-x-2">
+          {Array.from({ length: totalSlides }).map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`w-3 h-3 rounded-full transition-colors duration-200 ${
-                index === currentIndex ? "bg-blue-600" : "bg-gray-300"
+              className={`w-3 h-3 rounded-full transition-all duration-200 ${
+                index === currentIndex 
+                  ? 'bg-blue-600 scale-110' 
+                  : 'bg-gray-300 hover:bg-gray-400'
               }`}
-              aria-label={`Go to story ${index + 1}`}
+              aria-label={`Go to slide ${index + 1}`}
             />
           ))}
         </div>
       )}
+
+      {/* Progress Info */}
+      <div className="text-center mt-4 text-sm text-gray-500">
+        Showing {currentIndex * itemsPerView + 1} - {Math.min((currentIndex + 1) * itemsPerView, items.length)} of {items.length} stories
+      </div>
     </div>
   );
 };

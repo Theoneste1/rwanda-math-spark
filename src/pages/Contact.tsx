@@ -1,8 +1,9 @@
-
 import { Mail, Phone, MapPin, Clock, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 
 const Contact = () => {
   const linkedinUrl = "https://www.linkedin.com/company/103636241/admin/dashboard/";
+  const whatsappNumber = "+250780850611"; // WhatsApp number as requested
+  const whatsappUrl = `https://wa.me/250780850611`; // WhatsApp URL format
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -72,6 +73,27 @@ const Contact = () => {
                     <p className="text-gray-600">Sunday: Closed</p>
                   </div>
                 </div>
+                
+                {/* WhatsApp Contact - New addition */}
+                <div className="flex items-start">
+                  <div className="bg-green-100 p-3 rounded-lg mr-4">
+                    <Phone className="w-6 h-6 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-800 mb-1">WhatsApp</h3>
+                    <p className="text-gray-600 mb-2">Quick messaging and support</p>
+                    <a
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-green-600 hover:text-green-800 font-semibold flex items-center"
+                    >
+                      {whatsappNumber}
+                      <span className="ml-2 text-sm text-gray-500">(Click to chat)</span>
+                    </a>
+                  </div>
+                </div>
+                
               </div>
             </div>
 
@@ -139,7 +161,7 @@ const Contact = () => {
       <section className="py-20 bg-gray-100">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">Quick Contact</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="bg-white rounded-lg shadow-lg p-8 text-center hover:shadow-xl transition-shadow duration-300">
               <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
                 <Mail className="w-8 h-8 text-blue-600" />
@@ -185,6 +207,25 @@ const Contact = () => {
                 className="text-purple-600 hover:text-purple-800 font-semibold"
               >
                 theoneste99@gmail.com
+              </a>
+            </div>
+            
+            {/* WhatsApp Quick Contact - New addition */}
+            <div className="bg-white rounded-lg shadow-lg p-8 text-center hover:shadow-xl transition-shadow duration-300">
+              <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                <Phone className="w-8 h-8 text-green-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">WhatsApp Support</h3>
+              <p className="text-gray-600 mb-4">
+                Quick questions, instant support, and real-time communication
+              </p>
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 font-semibold"
+              >
+                Chat Now
               </a>
             </div>
           </div>

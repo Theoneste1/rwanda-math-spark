@@ -1,13 +1,9 @@
-
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Trophy, Users, Target, Award } from "lucide-react";
 import Pagination from "../components/common/Pagination";
 
 const Impact = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
-  const [currentSuccessPage, setCurrentSuccessPage] = useState(1);
-  const itemsPerPage = 8; // Maximum 8 stories per page
-
   const kpiData = [
     { kpi: "Total Participants", target2022: "30,000", actual2022: "32,500", target2023: "35,000", actual2023: "37,200" },
     { kpi: "Female Participation (%)", target2022: "45%", actual2022: "48%", target2023: "50%", actual2023: "52%" },
@@ -101,6 +97,9 @@ const Impact = () => {
     },
   ];
 
+  const [currentSuccessPage, setCurrentSuccessPage] = useState(1);
+  const itemsPerPage = 3; // Show 3 stories by default as requested
+
   // Calculate pagination for success stories
   const totalPages = Math.ceil(allSuccessStories.length / itemsPerPage);
   const startIndex = (currentSuccessPage - 1) * itemsPerPage;
@@ -166,7 +165,7 @@ const Impact = () => {
         </div>
       </section>
 
-      {/* Paginated Success Stories */}
+      {/* Paginated Success Stories - Updated to show 3 by default */}
       <section id="success-stories" className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">Success Stories</h2>
@@ -175,8 +174,8 @@ const Impact = () => {
             in universities, careers, and leadership roles worldwide.
           </p>
           
-          {/* Success stories grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {/* Success stories grid - Now showing 3 stories per page */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             {currentSuccessStories.map((story, index) => (
               <div key={startIndex + index} className="bg-gray-50 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <img

@@ -23,9 +23,9 @@ const Pagination: React.FC<PaginationProps> = ({
   showItemCount = true,
   className = ""
 }) => {
-  // Calculate visible page numbers (show max 5 pages)
+  // Calculate visible page numbers (show max 8 pages as requested)
   const getVisiblePages = () => {
-    const maxVisible = 5;
+    const maxVisible = 8; // Maximum 8 page numbers as requested
     let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
     let end = Math.min(totalPages, start + maxVisible - 1);
     
