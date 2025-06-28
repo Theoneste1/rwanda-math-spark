@@ -1,9 +1,12 @@
 
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Trophy, Users, Target, Award } from "lucide-react";
+import Pagination from "../components/common/Pagination";
 
 const Impact = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [currentSuccessPage, setCurrentSuccessPage] = useState(1);
+  const itemsPerPage = 8; // Maximum 8 stories per page
 
   const kpiData = [
     { kpi: "Total Participants", target2022: "30,000", actual2022: "32,500", target2023: "35,000", actual2023: "37,200" },
@@ -13,7 +16,8 @@ const Impact = () => {
     { kpi: "Teachers Trained", target2022: "200", actual2022: "245", target2023: "300", actual2023: "315" },
   ];
 
-  const successStories = [
+  // Extended success stories with more diverse profiles
+  const allSuccessStories = [
     {
       name: "Marie Uwimana",
       achievement: "MIT Scholarship Recipient",
@@ -32,6 +36,48 @@ const Impact = () => {
       image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=300&fit=crop&crop=face",
       story: "As team captain, Grace led Rwanda to its best-ever performance at international competitions while maintaining perfect gender balance in leadership roles.",
     },
+    {
+      name: "Emmanuel Nkurunziza",
+      achievement: "Stanford Graduate",
+      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face",
+      story: "From RwMO camps to Stanford University, Emmanuel now works at Google as a software engineer, crediting RwMO for teaching him problem-solving skills that extend beyond mathematics.",
+    },
+    {
+      name: "Sarah Uwizeye",
+      achievement: "Harvard Medical School",
+      image: "https://images.unsplash.com/photo-1559209172-2bf61d31aabb?w=300&h=300&fit=crop&crop=face",
+      story: "RwMO's rigorous training in logical thinking prepared Sarah for medical school. She's now pursuing her MD at Harvard, specializing in pediatric surgery.",
+    },
+    {
+      name: "Jean Claude Bizimana",
+      achievement: "IMO Bronze Medalist",
+      image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=300&h=300&fit=crop&crop=face",
+      story: "Jean Claude became the first Rwandan to win a medal at the International Mathematical Olympiad, bringing global recognition to Rwanda's mathematical talent.",
+    },
+    {
+      name: "Aline Mutoni",
+      achievement: "Cambridge University Scholar",
+      image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=300&h=300&fit=crop&crop=face",
+      story: "RwMO opened doors to Cambridge University where Aline is pursuing a PhD in Applied Mathematics, focusing on climate modeling for African agriculture.",
+    },
+    {
+      name: "Patrick Nzeyimana",
+      achievement: "Tech Entrepreneur",
+      image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&h=300&fit=crop&crop=face",
+      story: "After RwMO, Patrick founded a fintech startup in Kigali that now serves over 100,000 users across East Africa, applying mathematical algorithms to financial inclusion.",
+    },
+    {
+      name: "Claudine Uwimana",
+      achievement: "UNESCO Program Officer",
+      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&h=300&fit=crop&crop=face",
+      story: "Claudine now works with UNESCO to promote STEM education across Africa, using her RwMO experience to design programs that have reached over 50,000 students.",
+    },
+    {
+      name: "Felix Habimana",
+      achievement: "Oxford DPhil Student",
+      image: "https://images.unsplash.com/photo-1566492031773-4f4e44671d66?w=300&h=300&fit=crop&crop=face",
+      story: "Felix is pursuing his DPhil at Oxford in Mathematical Biology, researching disease modeling. His RwMO background gave him the foundation for complex mathematical research.",
+    }
   ];
 
   const testimonials = [
@@ -55,12 +101,24 @@ const Impact = () => {
     },
   ];
 
+  // Calculate pagination for success stories
+  const totalPages = Math.ceil(allSuccessStories.length / itemsPerPage);
+  const startIndex = (currentSuccessPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentSuccessStories = allSuccessStories.slice(startIndex, endIndex);
+
   const nextTestimonial = () => {
     setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
   };
 
   const prevTestimonial = () => {
     setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  };
+
+  const handleSuccessPageChange = (page: number) => {
+    setCurrentSuccessPage(page);
+    // Scroll to success stories section when page changes
+    document.getElementById('success-stories')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -108,26 +166,47 @@ const Impact = () => {
         </div>
       </section>
 
-      {/* Success Stories */}
-      <section className="py-20 bg-white">
+      {/* Paginated Success Stories */}
+      <section id="success-stories" className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">Success Stories</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {successStories.map((story, index) => (
-              <div key={index} className="bg-gray-50 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <p className="text-center text-gray-600 mb-8 max-w-3xl mx-auto">
+            Discover the inspiring journeys of our alumni who have gone on to achieve remarkable success 
+            in universities, careers, and leadership roles worldwide.
+          </p>
+          
+          {/* Success stories grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            {currentSuccessStories.map((story, index) => (
+              <div key={startIndex + index} className="bg-gray-50 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <img
                   src={story.image}
                   alt={story.name}
-                  className="w-full h-64 object-cover"
+                  className="w-full h-48 object-cover"
                 />
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">{story.name}</h3>
-                  <p className="text-blue-600 font-semibold mb-4">{story.achievement}</p>
-                  <p className="text-gray-600">{story.story}</p>
+                  {/* Story number */}
+                  <div className="text-sm text-blue-600 font-semibold mb-2">
+                    #{startIndex + index + 1}
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-800 mb-2">{story.name}</h3>
+                  <p className="text-blue-600 font-semibold mb-3 text-sm">{story.achievement}</p>
+                  <p className="text-gray-600 text-sm">{story.story}</p>
                 </div>
               </div>
             ))}
           </div>
+
+          {/* Pagination for success stories */}
+          <Pagination
+            currentPage={currentSuccessPage}
+            totalPages={totalPages}
+            onPageChange={handleSuccessPageChange}
+            itemsPerPage={itemsPerPage}
+            totalItems={allSuccessStories.length}
+            showItemCount={true}
+            className="mt-8"
+          />
         </div>
       </section>
 

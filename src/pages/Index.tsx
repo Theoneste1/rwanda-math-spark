@@ -1,8 +1,56 @@
+
 import { Link } from "react-router-dom";
 import { ChevronRight, Users, Trophy, Target, Award } from "lucide-react";
 import ChatBot from "../components/ChatBot";
+import Carousel from "../components/common/Carousel";
 
 const Index = () => {
+  // Extended success stories data with different types of people
+  const successStories = [
+    {
+      id: "1",
+      name: "Jean Baptiste Nsengimana",
+      role: "Alumni - Stanford University",
+      quote: "RwMO didn't just teach me mathematics—it taught me how to think critically, solve complex problems, and believe in the power of perseverance. The program shaped my entire academic journey.",
+      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+    },
+    {
+      id: "2",
+      name: "Grace Uwimana",
+      role: "Current Student - S6",
+      quote: "Being part of RwMO has opened doors I never imagined. The training camps, mentorship, and competitions have prepared me for university applications to top institutions worldwide.",
+      image: "https://images.unsplash.com/photo-1494790108755-2616b332c108?w=150&h=150&fit=crop&crop=face"
+    },
+    {
+      id: "3",
+      name: "Dr. Sarah Mukandoli",
+      role: "Mathematics Teacher & Mentor",
+      quote: "Watching these young minds flourish through RwMO has been the most rewarding experience of my career. They're not just solving equations—they're solving tomorrow's challenges.",
+      image: "https://images.unsplash.com/photo-1559209172-2bf61d31aabb?w=150&h=150&fit=crop&crop=face"
+    },
+    {
+      id: "4",
+      name: "Emmanuel Bizimana",
+      role: "Program Manager",
+      quote: "Managing RwMO has shown me the incredible potential of Rwandan youth. Every year, we see students exceed expectations and compete at the highest international levels.",
+      image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face"
+    },
+    {
+      id: "5",
+      name: "Marie Uwimana",
+      role: "Alumni - MIT Scholar",
+      quote: "From a shy student in Musanze to MIT—RwMO made this journey possible. The program doesn't just teach math; it builds confidence and opens global opportunities.",
+      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face"
+    },
+    {
+      id: "6",
+      name: "David Mukamana",
+      role: "PAMO Gold Medalist",
+      quote: "Winning Rwanda's first gold medal at PAMO was a dream come true. RwMO's rigorous training and support system made it possible to compete with the best in Africa.",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
+    }
+  ];
+
   const sponsors = [
     { name: "Jane Street", url: "https://www.janestreet.com/" },
     { name: "Carina Initiatives", url: "https://www.carina.fund/", logo: "/lovable-uploads/54fd327f-f5c3-41fe-9b5b-be85e246227a.png" },
@@ -14,13 +62,13 @@ const Index = () => {
     { name: "MIT", url: "https://www.mit.edu/", logo: "/lovable-uploads/c68a1031-acb9-47de-a1ee-057ba9d2c255.png" },
     { name: "Harvard", url: "https://www.harvard.edu/", logo: "/lovable-uploads/3b465dad-8059-4e8c-acc8-fcee7a6653cd.png" },
     { name: "Yale", url: "https://www.yale.edu/", logo: "/lovable-uploads/ad410bb8-b1e7-4597-8b81-c8ca068bb15b.png" },
-    { name: "African Leadership University", url: "https://www.alueducation.com/", logo: "/lovable-uploads/5a495ba1-4710-4fdf-91f1-2d1334030d5c.png" }, // Updated ALU logo
+    { name: "African Leadership University", url: "https://www.alueducation.com/", logo: "/lovable-uploads/5a495ba1-4710-4fdf-91f1-2d1334030d5c.png" },
     { name: "Ashesi", url: "https://www.ashesi.edu.gh/", logo: "/lovable-uploads/87a9489c-9a9d-4a03-bb95-34d2efab464b.png" },
     { name: "Caltech", url: "https://www.caltech.edu/", logo: "/lovable-uploads/9341434d-7938-45f8-aeb3-1d41bf781299.png" },
     { name: "Rice", url: "https://www.rice.edu/", logo: "/lovable-uploads/ecda7b10-e626-4cd7-a151-f7d0b549d327.png" },
     { name: "University of Cambridge", url: "https://www.cam.ac.uk/", logo: "/lovable-uploads/cc887979-9afc-423c-bdc6-202b2585112a.png" },
     { name: "Carnegie Mellon", url: "https://www.cmu.edu/" },
-    { name: "UGHE", url: "https://ughe.org/", logo: "/lovable-uploads/fe28381d-f15e-4390-8df4-fcafd2bf8079.png" }, // Added UGHE logo
+    { name: "UGHE", url: "https://ughe.org/", logo: "/lovable-uploads/fe28381d-f15e-4390-8df4-fcafd2bf8079.png" },
   ];
 
   return (
@@ -99,46 +147,25 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Impact Stories Section */}
+      {/* Success Stories Carousel Section */}
       <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">
             Success Stories
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="bg-gray-50 p-8 rounded-lg">
-              <div className="flex items-center mb-6">
-                <img
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
-                  alt="Jean M."
-                  className="w-16 h-16 rounded-full mr-4 object-cover"
-                />
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-800">Jean M.</h3>
-                  <p className="text-gray-600">Alumni, Class of 2023</p>
-                </div>
-              </div>
-              <p className="text-gray-700 text-lg italic">
-                "Thanks to RwMO, I secured a full scholarship at MIT. The program didn't just teach me mathematics—it taught me how to think, solve problems, and believe in myself."
-              </p>
-            </div>
-            <div className="bg-gray-50 p-8 rounded-lg">
-              <div className="flex items-center mb-6">
-                <img
-                  src="https://images.unsplash.com/photo-1494790108755-2616b332c108?w=150&h=150&fit=crop&crop=face"
-                  alt="Teacher Grace U."
-                  className="w-16 h-16 rounded-full mr-4 object-cover"
-                />
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-800">Grace U.</h3>
-                  <p className="text-gray-600">Mathematics Teacher</p>
-                </div>
-              </div>
-              <p className="text-gray-700 text-lg italic">
-                "This program has helped my students believe they can excel in mathematics. I've watched shy students become confident problem-solvers and future leaders."
-              </p>
-            </div>
-          </div>
+          <p className="text-center text-gray-600 mb-12 max-w-3xl mx-auto">
+            Hear from our diverse community of students, alumni, teachers, and program managers 
+            who have been part of the Rwanda Mathematics Olympiad journey.
+          </p>
+          
+          {/* Horizontal scrolling carousel */}
+          <Carousel 
+            items={successStories} 
+            autoPlay={true} 
+            autoPlayInterval={6000}
+            showArrows={true}
+            className="mb-8"
+          />
         </div>
       </section>
 
