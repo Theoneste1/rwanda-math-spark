@@ -48,13 +48,24 @@ const PDFDownloader: React.FC<PDFDownloaderProps> = ({
       const pageWidth = doc.internal.pageSize.getWidth();
       const pageHeight = doc.internal.pageSize.getHeight();
       
+      // Colors for enhanced styling
+      const colors = {
+        primary: [41, 128, 185], // Blue
+        secondary: [52, 152, 219], // Light blue
+        success: [39, 174, 96], // Green
+        danger: [231, 76, 60], // Red
+        dark: [44, 62, 80], // Dark gray
+        light: [236, 240, 241], // Light gray
+        white: [255, 255, 255]
+      };
+      
       let currentY = 20;
       
       // PDF Header with colored background
-      doc.setFillColor(41, 128, 185); // Blue
+      doc.setFillColor(...colors.primary);
       doc.rect(0, 0, pageWidth, 40, 'F');
       
-      doc.setTextColor(255, 255, 255); // White
+      doc.setTextColor(...colors.white);
       doc.setFontSize(20);
       doc.setFont('helvetica', 'bold');
       doc.text('Rwanda Mathematics Olympiad', pageWidth / 2, 20, { align: 'center' });
@@ -65,10 +76,10 @@ const PDFDownloader: React.FC<PDFDownloaderProps> = ({
       currentY = 60;
       
       // School Information Section with colored background
-      doc.setFillColor(236, 240, 241); // Light gray
+      doc.setFillColor(...colors.light);
       doc.rect(20, currentY - 10, pageWidth - 40, 40, 'F');
       
-      doc.setTextColor(44, 62, 80); // Dark gray
+      doc.setTextColor(...colors.dark);
       doc.setFontSize(14);
       doc.setFont('helvetica', 'bold');
       doc.text('School Information', 25, currentY);
@@ -89,11 +100,11 @@ const PDFDownloader: React.FC<PDFDownloaderProps> = ({
       const headerHeight = 15;
       
       // Header background
-      doc.setFillColor(52, 152, 219); // Light blue
+      doc.setFillColor(...colors.secondary);
       doc.rect(20, tableStartY - 5, pageWidth - 40, headerHeight, 'F');
       
       // Header text
-      doc.setTextColor(255, 255, 255); // White
+      doc.setTextColor(...colors.white);
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(11);
       doc.text('#', 25, tableStartY + 5);
@@ -116,10 +127,10 @@ const PDFDownloader: React.FC<PDFDownloaderProps> = ({
           currentY = 30;
           
           // Repeat header on new page
-          doc.setFillColor(52, 152, 219); // Light blue
+          doc.setFillColor(...colors.secondary);
           doc.rect(20, currentY - 5, pageWidth - 40, headerHeight, 'F');
           
-          doc.setTextColor(255, 255, 255); // White
+          doc.setTextColor(...colors.white);
           doc.setFont('helvetica', 'bold');
           doc.setFontSize(11);
           doc.text('#', 25, currentY + 5);
@@ -134,22 +145,22 @@ const PDFDownloader: React.FC<PDFDownloaderProps> = ({
         
         // Alternating row backgrounds
         if (index % 2 === 0) {
-          doc.setFillColor(236, 240, 241); // Light gray
+          doc.setFillColor(...colors.light);
           doc.rect(20, currentY - 3, pageWidth - 40, rowHeight, 'F');
         }
         
         // Row text color based on decision
         const decision = result['Decision'] || '';
         if (decision.toLowerCase().includes('qualified')) {
-          doc.setTextColor(39, 174, 96); // Green
+          doc.setTextColor(...colors.success);
         } else if (decision.toLowerCase().includes('not')) {
-          doc.setTextColor(231, 76, 60); // Red
+          doc.setTextColor(...colors.danger);
         } else {
-          doc.setTextColor(44, 62, 80); // Dark gray
+          doc.setTextColor(...colors.dark);
         }
         
         doc.text((index + 1).toString(), 25, currentY + 5);
-        doc.setTextColor(44, 62, 80); // Dark gray
+        doc.setTextColor(...colors.dark);
         doc.text(result['Student Name'] || '', 40, currentY + 5);
         doc.text(result['Gender'] || '', 105, currentY + 5);
         doc.text(result['Level'] || '', 130, currentY + 5);
@@ -157,11 +168,11 @@ const PDFDownloader: React.FC<PDFDownloaderProps> = ({
         
         // Decision with color coding
         if (decision.toLowerCase().includes('qualified')) {
-          doc.setTextColor(39, 174, 96); // Green
+          doc.setTextColor(...colors.success);
         } else if (decision.toLowerCase().includes('not')) {
-          doc.setTextColor(231, 76, 60); // Red
+          doc.setTextColor(...colors.danger);
         } else {
-          doc.setTextColor(44, 62, 80); // Dark gray
+          doc.setTextColor(...colors.dark);
         }
         doc.text(decision, 175, currentY + 5);
         
@@ -174,10 +185,10 @@ const PDFDownloader: React.FC<PDFDownloaderProps> = ({
         doc.setPage(i);
         
         // Footer background
-        doc.setFillColor(41, 128, 185); // Blue
+        doc.setFillColor(...colors.primary);
         doc.rect(0, pageHeight - 20, pageWidth, 20, 'F');
         
-        doc.setTextColor(255, 255, 255); // White
+        doc.setTextColor(...colors.white);
         doc.setFontSize(10);
         doc.text(
           `Page ${i} of ${totalPages} | ${schoolInfo.schoolName} - ${schoolInfo.round}`,
