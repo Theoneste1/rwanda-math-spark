@@ -107,8 +107,8 @@ const PDFDownloader: React.FC<PDFDownloaderProps> = ({
         doc.text(result['Decision'] || '', 175, currentY);
       });
       
-      // Footer
-      const totalPages = doc.internal.getNumberOfPages();
+      // Footer - Fixed the method call here
+      const totalPages = doc.getNumberOfPages();
       for (let i = 1; i <= totalPages; i++) {
         doc.setPage(i);
         doc.setFontSize(10);
