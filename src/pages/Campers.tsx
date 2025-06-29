@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Search, CheckSquare, Square, FileText, ChevronLeft, ChevronRight, Download, Users } from "lucide-react";
@@ -276,6 +275,22 @@ const Campers = () => {
     }
   };
 
+  // Generate visible page numbers (show max 7 pages)
+  const getVisiblePages = () => {
+    const maxVisible = 7;
+    let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+    let end = Math.min(totalPages, start + maxVisible - 1);
+    
+    // Adjust start if we're near the end
+    if (end - start + 1 < maxVisible) {
+      start = Math.max(1, end - maxVisible + 1);
+    }
+    
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  };
+
+  const visiblePages = getVisiblePages();
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 pt-16">
@@ -447,17 +462,56 @@ const Campers = () => {
                   />
                 </PaginationItem>
                 
-                {[...Array(totalPages)].map((_, i) => (
-                  <PaginationItem key={i + 1}>
+                {/* First page if not visible */}
+                {visiblePages[0] > 1 && (
+                  <>
+                    <PaginationItem>
+                      <PaginationLink
+                        onClick={() => setCurrentPage(1)}
+                        className="cursor-pointer"
+                      >
+                        1
+                      </PaginationLink>
+                    </PaginationItem>
+                    {visiblePages[0] > 2 && (
+                      <PaginationItem>
+                        <span className="px-3 py-2 text-sm text-gray-500">...</span>
+                      </PaginationItem>
+                    )}
+                  </>
+                )}
+
+                {/* Visible page numbers */}
+                {visiblePages.map((page) => (
+                  <PaginationItem key={page}>
                     <PaginationLink
-                      onClick={() => setCurrentPage(i + 1)}
-                      isActive={currentPage === i + 1}
+                      onClick={() => setCurrentPage(page)}
+                      isActive={currentPage === page}
                       className="cursor-pointer"
                     >
-                      {i + 1}
+                      {page}
                     </PaginationLink>
                   </PaginationItem>
                 ))}
+
+                {/* Last page if not visible */}
+                {visiblePages[visiblePages.length - 1] < totalPages && (
+                  <>
+                    {visiblePages[visiblePages.length - 1] < totalPages - 1 && (
+                      <PaginationItem>
+                        <span className="px-3 py-2 text-sm text-gray-500">...</span>
+                      </PaginationItem>
+                    )}
+                    <PaginationItem>
+                      <PaginationLink
+                        onClick={() => setCurrentPage(totalPages)}
+                        className="cursor-pointer"
+                      >
+                        {totalPages}
+                      </PaginationLink>
+                    </PaginationItem>
+                  </>
+                )}
                 
                 <PaginationItem>
                   <PaginationNext
