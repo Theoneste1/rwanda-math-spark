@@ -268,7 +268,6 @@ const Campers = () => {
 
       alert(`Successfully generated ${selectedCampers.size} invitation letters!`);
     } catch (error) {
-      console.error('Error generating PDFs:', error);
       alert('There was an error generating the letters. Please try again.');
     } finally {
       setIsGenerating(false);
