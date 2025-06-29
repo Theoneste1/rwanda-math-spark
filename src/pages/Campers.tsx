@@ -1,259 +1,474 @@
 
-import React, { useState, useMemo } from 'react';
-import { Search, MapPin, Calendar, Users } from 'lucide-react';
-import DataTable from '@/components/common/DataTable';
+import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Search, CheckSquare, Square, FileText, ChevronLeft, ChevronRight, Download, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 
-// Interface for camper data structure
-interface CamperData {
+interface Camper {
   name: string;
   school: string;
   district: string;
-  level: string;
-  year: string;
-  achievements?: string;
+  gender: string;
+  s_date?: string;
+  e_date?: string;
+  [key: string]: string | undefined;
 }
 
-/**
- * Campers page component
- * Purpose: Display paginated list of Rwanda Mathematics Olympiad campers
- * Features: Search functionality, filtering, pagination with max 8 rows per page
- */
 const Campers = () => {
-  // State for search and pagination
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [selectedYear, setSelectedYear] = useState<string>('All');
-  const [selectedLevel, setSelectedLevel] = useState<string>('All');
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  
-  // Constants for pagination - Maximum 8 rows per page as requested
-  const ITEMS_PER_PAGE = 8;
-  
-  // Mock data for campers (in real app, this would come from an API)
-  const allCampers: CamperData[] = [
-    { name: "Marie Uwimana", school: "Green Hills Academy", district: "Gasabo", level: "Advanced", year: "2024", achievements: "PAMO Bronze Medal" },
-    { name: "David Mukamana", school: "Lycée Notre Dame de Cîteaux", district: "Nyarugenge", level: "Intermediate", year: "2024", achievements: "National Champion" },
-    { name: "Grace Ingabire", school: "King David Academy", district: "Kicukiro", level: "Advanced", year: "2024", achievements: "Team Captain" },
-    { name: "Emmanuel Nkurunziza", school: "Riviera High School", district: "Gasabo", level: "Advanced", year: "2023", achievements: "IMO Participant" },
-    { name: "Sarah Uwizeye", school: "Lycée de Kigali", district: "Nyarugenge", level: "Intermediate", year: "2023", achievements: "Regional Winner" },
-    { name: "Jean Claude Bizimana", school: "Fawe Girls School", district: "Kicukiro", level: "Advanced", year: "2023", achievements: "Gold Medal" },
-    { name: "Aline Mutoni", school: "Gashora Girls Academy", district: "Bugesera", level: "Intermediate", year: "2024", achievements: "Best Problem Solver" },
-    { name: "Patrick Nzeyimana", school: "Sonrise High School", district: "Gasabo", level: "Advanced", year: "2022", achievements: "Innovation Award" },
-    { name: "Claudine Uwimana", school: "Wellspring Academy", district: "Nyarugenge", level: "Beginner", year: "2024", achievements: "Most Improved" },
-    { name: "Felix Habimana", school: "Legacy Christian Academy", district: "Kicukiro", level: "Advanced", year: "2022", achievements: "Excellence Award" },
-    { name: "Diane Mukasine", school: "Petit Séminaire Virgo Fidelis", district: "Muhanga", level: "Intermediate", year: "2024", achievements: "Team Spirit Award" },
-    { name: "Samuel Uwamahoro", school: "College Christ-Roi", district: "Huye", level: "Advanced", year: "2023", achievements: "Research Excellence" },
-    { name: "Ange Mukandayisenga", school: "Groupe Scolaire Officiel de Butare", district: "Huye", level: "Beginner", year: "2024", achievements: "Rising Star" },
-    { name: "Christian Niyonkuru", school: "Ecole Secondaire de Nyamirambo", district: "Nyarugenge", level: "Intermediate", year: "2022", achievements: "Dedication Award" },
-    { name: "Vestine Uwimana", school: "Lycée Sainte Famille", district: "Muhanga", level: "Advanced", year: "2023", achievements: "Leadership Award" },
-    { name: "Pacifique Nzeyimana", school: "Green Park International School", district: "Gasabo", level: "Beginner", year: "2024", achievements: "Newcomer Award" },
-    { name: "Ornella Uwamahoro", school: "Academie de la Salle", district: "Kicukiro", level: "Intermediate", year: "2022", achievements: "Perseverance Medal" },
-    { name: "Yves Nkundimana", school: "Collège de Gisenyi", district: "Rubavu", level: "Advanced", year: "2023", achievements: "International Recognition" },
-    { name: "Clarisse Mukansanga", school: "Lycée Sainte Marie", district: "Musanze", level: "Beginner", year: "2024", achievements: "Rapid Progress Award" },
-    { name: "Thierry Uwimana", school: "College Saint Andre", district: "Kigali", level: "Intermediate", year: "2022", achievements: "Teamwork Excellence" }
-  ];
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCampers, setSelectedCampers] = useState<Set<string>>(new Set());
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const campersPerPage = 10;
 
-  // Filter campers based on search and filter criteria
-  const filteredCampers = useMemo(() => {
-    return allCampers.filter(camper => {
-      const matchesSearch = searchTerm === '' || 
-        camper.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        camper.school.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        camper.district.toLowerCase().includes(searchTerm.toLowerCase());
+  // Fetch campers data from Google Sheets
+  const {
+    data: campers = [],
+    isLoading,
+    error
+  } = useQuery({
+    queryKey: ['campers'],
+    queryFn: async () => {
+      const response = await fetch('https://docs.google.com/spreadsheets/d/1_goCAnx9eFbY_hBHQpUggbWYQKWuKZrUPWP8s8zgpIM/gviz/tq?tqx=out:csv&sheet=CAMP1');
+      const csvText = await response.text();
+      console.log('Raw CSV data:', csvText);
+
+      // Parse CSV - Split by lines and handle quoted values properly
+      const lines = csvText.split('\n').filter(line => line.trim());
+      if (lines.length === 0) return [];
+
+      // Parse the header row
+      const headerLine = lines[0];
+      const headers = headerLine.split(',').map(header => header.replace(/"/g, '').trim());
+      console.log('Headers:', headers);
       
-      const matchesYear = selectedYear === 'All' || camper.year === selectedYear;
-      const matchesLevel = selectedLevel === 'All' || camper.level === selectedLevel;
+      const campersData: Camper[] = [];
       
-      return matchesSearch && matchesYear && matchesLevel;
-    });
-  }, [searchTerm, selectedYear, selectedLevel]);
+      for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredCampers.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-  const paginatedCampers = filteredCampers.slice(startIndex, endIndex);
+        // Simple CSV parsing - split by comma and remove quotes
+        const values = line.split(',').map(value => value.replace(/"/g, '').trim());
 
-  // Get unique years and levels for filter options
-  const availableYears = ['All', ...Array.from(new Set(allCampers.map(c => c.year))).sort()];
-  const availableLevels = ['All', ...Array.from(new Set(allCampers.map(c => c.level)))];
+        // Create camper object
+        const camper: Camper = {
+          name: '',
+          school: '',
+          district: '',
+          gender: ''
+        };
 
-  // Define table columns
-  const tableColumns = [
-    {
-      key: 'name',
-      label: 'Name',
-      render: (value: string) => (
-        <span className="font-medium text-gray-900">{value}</span>
-      )
-    },
-    {
-      key: 'school',
-      label: 'School',
-      render: (value: string) => value
-    },
-    {
-      key: 'district',
-      label: 'District',
-      render: (value: string) => (
-        <div className="flex items-center">
-          <MapPin className="w-4 h-4 text-gray-400 mr-1" />
-          {value}
-        </div>
-      )
-    },
-    {
-      key: 'level',
-      label: 'Level',
-      render: (value: string) => (
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-          value === 'Advanced' ? 'bg-red-100 text-red-800' :
-          value === 'Intermediate' ? 'bg-yellow-100 text-yellow-800' :
-          'bg-green-100 text-green-800'
-        }`}>
-          {value}
-        </span>
-      )
-    },
-    {
-      key: 'year',
-      label: 'Year',
-      render: (value: string) => (
-        <div className="flex items-center">
-          <Calendar className="w-4 h-4 text-gray-400 mr-1" />
-          {value}
-        </div>
-      )
-    },
-    {
-      key: 'achievements',
-      label: 'Achievements',
-      render: (value: string) => value || '-'
+        // Map the values to our expected fields
+        headers.forEach((header, index) => {
+          const value = values[index] || '';
+
+          // Map CSV headers to our expected field names
+          if (header.toUpperCase().includes('STUDENT NAME') || header.toUpperCase().includes('NAME')) {
+            camper.name = value;
+          } else if (header.toUpperCase().includes('SCHOOL')) {
+            camper.school = value;
+          } else if (header.toUpperCase().includes('DISTRICT') && !header.toUpperCase().includes('HOME')) {
+            camper.district = value;
+          } else if (header.toUpperCase().includes('GENDER')) {
+            camper.gender = value;
+          } else if (header.toUpperCase().includes('S_DATE')) {
+            camper.s_date = value;
+          } else if (header.toUpperCase().includes('E_DATE')) {
+            camper.e_date = value;
+          }
+
+          // Store all fields for potential future use
+          camper[header.toLowerCase().replace(/\s+/g, '_')] = value;
+        });
+
+        // Only add campers with a name
+        if (camper.name && camper.name !== 'NO') {
+          campersData.push(camper);
+        }
+      }
+      
+      console.log('Parsed campers:', campersData);
+      return campersData;
     }
-  ];
+  });
 
-  /**
-   * Handle page changes - resets to page 1 when filters change
-   */
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    // Scroll to top of results
-    document.getElementById('campers-section')?.scrollIntoView({ behavior: 'smooth' });
-  };
+  // Filter campers based on search term
+  const filteredCampers = campers.filter(camper => 
+    camper.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    camper.school.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    camper.district.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  /**
-   * Handle filter changes - reset to page 1
-   */
-  const handleFilterChange = (filterType: 'year' | 'level', value: string) => {
-    setCurrentPage(1);
-    if (filterType === 'year') {
-      setSelectedYear(value);
+  // Pagination logic
+  const totalPages = Math.ceil(filteredCampers.length / campersPerPage);
+  const startIndex = (currentPage - 1) * campersPerPage;
+  const currentCampers = filteredCampers.slice(startIndex, startIndex + campersPerPage);
+
+  // Handle checkbox selection
+  const toggleCamperSelection = (camperName: string) => {
+    const newSelected = new Set(selectedCampers);
+    if (newSelected.has(camperName)) {
+      newSelected.delete(camperName);
     } else {
-      setSelectedLevel(value);
+      newSelected.add(camperName);
+    }
+    setSelectedCampers(newSelected);
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedCampers.size === currentCampers.length) {
+      setSelectedCampers(new Set());
+    } else {
+      setSelectedCampers(new Set(currentCampers.map(camper => camper.name)));
     }
   };
 
-  /**
-   * Handle search changes - reset to page 1
-   */
-  const handleSearchChange = (value: string) => {
-    setCurrentPage(1);
-    setSearchTerm(value);
+  const generatePDFLetters = async () => {
+    if (selectedCampers.size === 0) {
+      alert('Please select at least one camper to generate letters.');
+      return;
+    }
+
+    setIsGenerating(true);
+
+    try {
+      // Import jsPDF dynamically
+      const { jsPDF } = await import('jspdf');
+      
+      selectedCampers.forEach(camperName => {
+        const camper = campers.find(c => c.name === camperName);
+        if (!camper) return;
+
+        const doc = new jsPDF();
+
+        // Set consistent margins
+        const leftMargin = 20;
+        const rightMargin = 20;
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const contentWidth = pageWidth - leftMargin - rightMargin;
+
+        // Add Rwanda Mathematical Olympiad logo at the top center
+        const logoWidth = 100;
+        const logoHeight = 20;
+        const logoX = (pageWidth - logoWidth) / 2;
+        const logoY = 20;
+
+        try {
+          doc.addImage('/lovable-uploads/4b9719bb-905e-4daa-b406-6d19562edd83.png', 'PNG', logoX, logoY, logoWidth, logoHeight);
+        } catch (error) {
+          console.log('Logo image not loaded, continuing without logo');
+        }
+
+        // Document title - centered below logo
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(12);
+        const titleY = logoY + logoHeight + 15;
+        doc.text('2025 National Mathematics Summer Camp – AIMS Rwanda', pageWidth / 2, titleY, { align: 'center' });
+
+        const dateY = titleY;
+
+        // Greeting - aligned to left margin
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'normal');
+        const greetingY = dateY + 15;
+        doc.text(`Hello ${camper.name}`, leftMargin, greetingY);
+        doc.text(`Student at ${camper.school},`, leftMargin, greetingY + 7);
+
+        // Body text - respecting margins with proper line wrapping
+        const sDate = camper.s_date || '[S_DATE]';
+        const eDate = camper.e_date || '[E_DATE]';
+        
+        const bodyText = [
+          'Congratulations on your outstanding performance in the Rwanda Mathematics Competitions, let alone Round 3. You have been selected to attend the 2025 National Mathematics Summer Camp at AIMS Rwanda, thanks to your hard work and exceptional problem-solving skills.',
+          '',
+          `This year's selection process was highly competitive, and your achievement is truly commendable. We deeply appreciate your efforts and are excited to welcome you among the top math students in the country. This camp will happen at AIMS-Rwanda, Kigali, from ${sDate} to ${eDate}, and the arrival date is ${sDate} by 11:00 AM, Kigali time.`,
+          '',
+          'At the camp, you will come with one Math notebook and pens, no need for a calculator, bring casual personal and sports clothes, sport materials, any essential medications, and a reusable water bottle.',
+          '',
+          'We will provide accommodation, meals, training materials, and full support during the camp. Be ready to challenge yourself, work with peers, and grow as a mathematician.',
+          '',
+          `If you have any questions, feel free to contact Theoneste at theoneste.sanzabarinda@aims.ac.rw or via WhatsApp 0780850611. Every student should confirm their attendance 7 days before ${sDate} by joining the telegram channel called OLYMPIADSUMMERCAMP2025 and fill and sign the form letter that he will find there.`,
+          '',
+          'We look forward to welcoming you to the Rwanda Olympiad community!'
+        ];
+
+        let yPosition = greetingY + 20;
+        const lineHeight = 5;
+
+        bodyText.forEach(line => {
+          if (line === '') {
+            yPosition += lineHeight;
+            return;
+          }
+
+          const wrappedLines = doc.splitTextToSize(line, contentWidth);
+          wrappedLines.forEach((wrappedLine: string) => {
+            doc.text(wrappedLine, leftMargin, yPosition);
+            yPosition += lineHeight;
+          });
+        });
+
+        // Closing and signature section
+        yPosition += 10;
+
+        // Closing text
+        doc.text('Warm regards,', leftMargin, yPosition);
+        yPosition += 10;
+
+        // Add signature image aligned to left margin
+        const signatureWidth = 45;
+        const signatureHeight = 14;
+        const signatureY = yPosition;
+        
+        try {
+          doc.addImage('/lovable-uploads/a1bc53f6-4c31-434f-863c-635ccb3dc5ed.png', 'PNG', leftMargin, signatureY, signatureWidth, signatureHeight);
+        } catch (error) {
+          console.log('Signature image not loaded, continuing without signature');
+        }
+
+        // Signer details below signature - aligned to left margin
+        const signerDetailsY = signatureY + signatureHeight + 5;
+        doc.setFontSize(11);
+        const signerDetails = [
+          'Obed Nsanzimfura',
+          'Rwanda Olympiad Program, Program Manager',
+          'African Institute for Mathematical Sciences (AIMS), Rwanda'
+        ];
+        
+        let signerY = signerDetailsY;
+        signerDetails.forEach(detail => {
+          doc.text(detail, leftMargin, signerY);
+          signerY += 5;
+        });
+
+        // Footer with contact information - centered at bottom
+        doc.setFontSize(8);
+        doc.setTextColor(128, 128, 128);
+        const footerText = [
+          'African Institute for Mathematical Sciences (AIMS), Rwanda',
+          'Address: KG 3 Ave, Kigali, Rwanda | Website: www.aims.ac.rw | Email: matholympiad@aims.ac.rw'
+        ];
+        
+        let footerY = 270;
+        footerText.forEach(line => {
+          doc.text(line, pageWidth / 2, footerY, { align: 'center' });
+          footerY += 4;
+        });
+
+        // Reset text color for next document
+        doc.setTextColor(0, 0, 0);
+
+        // Save the PDF
+        doc.save(`${camper.name.replace(/\s+/g, '_')}_RMC2025_INVITATION.pdf`);
+      });
+
+      alert(`Successfully generated ${selectedCampers.size} invitation letters!`);
+    } catch (error) {
+      console.error('Error generating PDFs:', error);
+      alert('There was an error generating the letters. Please try again.');
+    } finally {
+      setIsGenerating(false);
+    }
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-16">
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          <div className="flex items-center justify-center h-64">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+              <div className="text-lg text-gray-600">Loading campers data...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-16">
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          <div className="text-center text-red-600 bg-red-50 p-6 rounded-lg">
+            <h2 className="text-xl font-semibold mb-2">Error Loading Data</h2>
+            <p>Unable to load campers data. Please check your internet connection and try again.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 pt-16">
-      <div className="max-w-6xl mx-auto px-4 py-20">
-        {/* Page Header */}
-        <div className="text-center mb-12">
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            Mathematics Olympiad Campers
+            Rwanda Olympiad Summer Camp 2025
           </h1>
-          <p className="text-xl text-gray-600">
-            Talented students who participated in our intensive training camps
-          </p>
-        </div>
-
-        {/* Filters and Search */}
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {/* Search */}
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Search Campers
-              </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  value={searchTerm}
-                  onChange={(e) => handleSearchChange(e.target.value)}
-                  placeholder="Search by name, school, or district..."
-                  className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-                <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-              </div>
+          <div className="flex items-center justify-center gap-6 text-gray-600">
+            <div className="flex items-center gap-2">
+              <Users className="w-5 h-5" />
+              <span>{campers.length} Total Campers</span>
             </div>
-
-            {/* Year Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Year
-              </label>
-              <select
-                value={selectedYear}
-                onChange={(e) => handleFilterChange('year', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                {availableYears.map(year => (
-                  <option key={year} value={year}>{year}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* Level Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Level
-              </label>
-              <select
-                value={selectedLevel}
-                onChange={(e) => handleFilterChange('level', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                {availableLevels.map(level => (
-                  <option key={level} value={level}>{level}</option>
-                ))}
-              </select>
+            <div className="flex items-center gap-2">
+              <FileText className="w-5 h-5" />
+              <span>{selectedCampers.size} Selected</span>
             </div>
           </div>
+        </div>
+        
+        {/* Search and Actions */}
+        <div className="mb-6 flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Input
+              type="text"
+              placeholder="Search campers by name, school, or district..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="pl-10"
+            />
+          </div>
+          
+          <Button
+            onClick={generatePDFLetters}
+            disabled={selectedCampers.size === 0 || isGenerating}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            {isGenerating ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                Generating...
+              </>
+            ) : (
+              <>
+                <Download className="w-4 h-4 mr-2" />
+                Generate Letters ({selectedCampers.size})
+              </>
+            )}
+          </Button>
         </div>
 
         {/* Results Summary */}
-        <div className="mb-6">
-          <div className="flex items-center text-gray-600">
-            <Users className="w-5 h-5 mr-2" />
-            <span>
-              Showing {startIndex + 1} to {Math.min(endIndex, filteredCampers.length)} of {filteredCampers.length} campers
-            </span>
-          </div>
+        <div className="mb-4 text-sm text-gray-600">
+          Showing {currentCampers.length} of {filteredCampers.length} campers
+          {searchTerm && ` (filtered from ${campers.length} total)`}
         </div>
 
         {/* Campers Table */}
-        <div id="campers-section" className="bg-white rounded-lg shadow-lg">
-          <DataTable
-            data={paginatedCampers}
-            columns={tableColumns}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-            itemsPerPage={ITEMS_PER_PAGE}
-            totalItems={filteredCampers.length}
-            loading={false}
-            emptyMessage="No campers found matching your criteria"
-            numberedRows={true}
-            showPagination={true}
-            className="p-6"
-          />
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <style>{`
+            .improved-table {
+              border-collapse: collapse;
+              width: 100%;
+            }
+            .improved-table th {
+              background-color: #00A46C;
+              color: white;
+              padding: 12px;
+              text-align: left;
+              font-weight: bold;
+            }
+            .improved-table td {
+              padding: 12px;
+              border-bottom: 1px solid #ddd;
+            }
+            .improved-table tr:nth-child(odd) td {
+              background-color: #ffffff;
+            }
+            .improved-table tr:nth-child(even) td {
+              background-color: #f8f9fa;
+            }
+            .improved-table tr:hover td {
+              background-color: #e3f2fd;
+            }
+          `}</style>
+          <Table className="improved-table">
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-12">
+                  <Checkbox
+                    checked={selectedCampers.size === currentCampers.length && currentCampers.length > 0}
+                    onCheckedChange={toggleSelectAll}
+                  />
+                </TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead>School</TableHead>
+                <TableHead>District</TableHead>
+                <TableHead>Gender</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {currentCampers.map((camper, index) => (
+                <TableRow key={index}>
+                  <TableCell>
+                    <Checkbox
+                      checked={selectedCampers.has(camper.name)}
+                      onCheckedChange={() => toggleCamperSelection(camper.name)}
+                    />
+                  </TableCell>
+                  <TableCell className="font-medium">{camper.name}</TableCell>
+                  <TableCell>{camper.school}</TableCell>
+                  <TableCell>{camper.district}</TableCell>
+                  <TableCell>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      camper.gender === 'Male' 
+                        ? 'bg-blue-100 text-blue-800' 
+                        : 'bg-pink-100 text-pink-800'
+                    }`}>
+                      {camper.gender}
+                    </span>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-6 flex justify-center">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                    className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                  />
+                </PaginationItem>
+                
+                {[...Array(totalPages)].map((_, i) => (
+                  <PaginationItem key={i + 1}>
+                    <PaginationLink
+                      onClick={() => setCurrentPage(i + 1)}
+                      isActive={currentPage === i + 1}
+                      className="cursor-pointer"
+                    >
+                      {i + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                
+                <PaginationItem>
+                  <PaginationNext
+                    onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                    className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        )}
       </div>
     </div>
   );
