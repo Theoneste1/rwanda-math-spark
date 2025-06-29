@@ -25,8 +25,8 @@ const Campers = () => {
   const [selectedLevel, setSelectedLevel] = useState<string>('All');
   const [currentPage, setCurrentPage] = useState<number>(1);
   
-  // Constants for pagination
-  const ITEMS_PER_PAGE = 8; // Maximum 8 rows per page as requested
+  // Constants for pagination - Maximum 8 rows per page as requested
+  const ITEMS_PER_PAGE = 8;
   
   // Mock data for campers (in real app, this would come from an API)
   const allCampers: CamperData[] = [
