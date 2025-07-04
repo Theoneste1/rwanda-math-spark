@@ -1,231 +1,227 @@
 
-import { useState } from "react";
-import { DollarSign, GraduationCap, Building, CheckCircle } from "lucide-react";
+import { Users, BookOpen, Heart, Mail, Phone, MapPin } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const GetInvolved = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-    sponsorshipType: ""
-  });
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-    setIsSubmitted(true);
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({ name: "", email: "", message: "", sponsorshipType: "" });
-    }, 3000);
-  };
-
-  const sponsorshipOptions = [
+  const opportunities = [
     {
-      title: "Sponsor a Student",
-      amount: "$500/year",
-      icon: GraduationCap,
-      description: "Provide full support for one student's training, materials, and competition participation.",
-      benefits: [
-        "Direct impact on one student's mathematical journey",
-        "Regular updates on student progress",
-        "Invitation to graduation ceremonies",
-        "Tax-deductible contribution"
-      ]
+      icon: Users,
+      title: "Volunteer as a Coach",
+      description: "Share your mathematical expertise by mentoring talented students during our training camps and competitions.",
+      requirements: ["Strong mathematics background", "Passion for teaching", "Available for weekend sessions"],
+      action: "Apply to Coach"
     },
     {
-      title: "Sponsor a Teacher",
-      amount: "$1,500/year",
-      icon: Building,
-      description: "Fund professional development and training for mathematics teachers.",
-      benefits: [
-        "Enhance teaching quality across multiple schools",
-        "Access to training reports and outcomes",
-        "Recognition in program materials",
-        "Multiplied impact through improved instruction"
-      ]
+      icon: BookOpen,
+      title: "Teacher Training Program",
+      description: "Join our professional development program to enhance your mathematics teaching skills and problem-solving techniques.",
+      requirements: ["Certified mathematics teacher", "Teaching experience", "Commitment to attend workshops"],
+      action: "Join Training"
     },
     {
-      title: "Host a Camp",
-      amount: "$10,000",
-      icon: DollarSign,
-      description: "Sponsor an entire training camp for our top 90 students.",
-      benefits: [
-        "Your organization's name on the camp",
-        "VIP access to camp activities and ceremonies",
-        "Media coverage and PR opportunities",
-        "Direct interaction with Rwanda's brightest minds"
-      ]
+      icon: Heart,
+      title: "Support as a Sponsor",
+      description: "Help us expand our reach by providing financial support for training camps, materials, and international competitions.",
+      requirements: ["Individual or organization", "Commitment to education", "Partnership agreement"],
+      action: "Become Sponsor"
     }
   ];
 
+  const benefits = [
+    "Contribute to Rwanda's mathematical excellence",
+    "Network with education professionals",
+    "Professional development opportunities",
+    "Recognition in our community",
+    "Access to international mathematics resources",
+    "Certificate of participation"
+  ];
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-green-900 to-blue-900 text-white py-20">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-5xl font-bold mb-6">Get Involved</h1>
-          <p className="text-xl opacity-90">
-            Join us in empowering Rwanda's next generation of STEM leaders
-          </p>
+      <section className="bg-gradient-to-br from-green-800 to-green-600 text-white py-16 sm:py-20 lg:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6">
+              Get Involved
+            </h1>
+            <p className="text-lg sm:text-xl lg:text-2xl text-green-100 max-w-3xl mx-auto leading-relaxed">
+              Join our mission to nurture Rwanda's mathematical talent and build a brighter future through education
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* Sponsorship Options */}
-      <section className="py-20">
-        <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">Sponsorship Opportunities</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {sponsorshipOptions.map((option, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 text-center">
-                  <option.icon className="w-16 h-16 mx-auto mb-4" />
-                  <h3 className="text-2xl font-bold mb-2">{option.title}</h3>
-                  <p className="text-3xl font-bold">{option.amount}</p>
-                </div>
-                <div className="p-6">
-                  <p className="text-gray-600 mb-6">{option.description}</p>
-                  <ul className="space-y-3">
-                    {option.benefits.map((benefit, benefitIndex) => (
-                      <li key={benefitIndex} className="flex items-start">
-                        <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                        <span className="text-gray-600">{benefit}</span>
+      {/* Opportunities */}
+      <section className="py-12 sm:py-16 lg:py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-4 sm:mb-6">
+              Ways to Make a Difference
+            </h2>
+            <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Choose how you'd like to contribute to Rwanda's mathematical excellence
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+            {opportunities.map((opportunity, index) => (
+              <div key={index} className="bg-gray-50 p-6 sm:p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <opportunity.icon className="w-10 sm:w-12 h-10 sm:h-12 text-green-600 mb-4 sm:mb-6" />
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-3 sm:mb-4">
+                  {opportunity.title}
+                </h3>
+                <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 leading-relaxed">
+                  {opportunity.description}
+                </p>
+                
+                <div className="mb-4 sm:mb-6">
+                  <h4 className="text-sm sm:text-base font-semibold text-gray-800 mb-2 sm:mb-3">Requirements:</h4>
+                  <ul className="text-xs sm:text-sm text-gray-600 space-y-1 sm:space-y-2">
+                    {opportunity.requirements.map((req, reqIndex) => (
+                      <li key={reqIndex} className="flex items-start">
+                        <span className="text-green-600 mr-2">•</span>
+                        <span>{req}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
+                
+                <Link
+                  to="/contact"
+                  className="inline-block w-full text-center bg-green-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-200 text-sm sm:text-base"
+                >
+                  {opportunity.action}
+                </Link>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Contact Form */}
-      <section className="py-20 bg-white">
-        <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">Start Your Partnership</h2>
-          
-          {isSubmitted ? (
-            <div className="bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-lg text-center">
-              <CheckCircle className="w-12 h-12 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Thank you for your interest!</h3>
-              <p>We'll be in touch within 24 hours to discuss how we can work together.</p>
+      {/* Benefits */}
+      <section className="py-12 sm:py-16 lg:py-20 bg-green-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            <div>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-4 sm:mb-6">
+                Benefits of Joining Us
+              </h2>
+              <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8 leading-relaxed">
+                When you join the Rwanda Mathematics Olympiad community, you're not just volunteering – you're investing in Rwanda's future and your own professional growth.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                {benefits.map((benefit, index) => (
+                  <div key={index} className="flex items-start">
+                    <span className="text-green-600 mr-2 sm:mr-3 mt-1">✓</span>
+                    <span className="text-sm sm:text-base text-gray-700">{benefit}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="bg-gray-50 rounded-lg p-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                    Full Name *
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
-                    placeholder="Enter your full name"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
-                    placeholder="Enter your email address"
-                  />
-                </div>
-              </div>
-              
-              <div className="mb-6">
-                <label htmlFor="sponsorshipType" className="block text-sm font-medium text-gray-700 mb-2">
-                  Sponsorship Interest
-                </label>
-                <select
-                  id="sponsorshipType"
-                  name="sponsorshipType"
-                  value={formData.sponsorshipType}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
-                >
-                  <option value="">Select a sponsorship option</option>
-                  <option value="student">Sponsor a Student ($500/year)</option>
-                  <option value="teacher">Sponsor a Teacher ($1,500/year)</option>
-                  <option value="camp">Host a Camp ($10,000)</option>
-                  <option value="custom">Custom Partnership</option>
-                </select>
-              </div>
-              
-              <div className="mb-6">
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                  Message *
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  required
-                  rows={5}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
-                  placeholder="Tell us about your organization and how you'd like to get involved..."
-                />
-              </div>
-              
-              <button
-                type="submit"
-                className="w-full bg-blue-600 text-white py-4 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105"
-              >
-                Send Message
-              </button>
-            </form>
-          )}
+            <div className="flex justify-center">
+              <img
+                src="/lovable-uploads/17cc90d2-2994-4d96-8763-249e19c98daf.png"
+                alt="Mathematics Olympiad Community"
+                className="w-full max-w-md rounded-lg shadow-xl"
+              />
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Donation Links */}
-      <section className="py-20 bg-blue-900 text-white">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-8">Ready to Make an Impact?</h2>
-          <p className="text-xl mb-8 opacity-90">
-            Choose your preferred way to support Rwanda's mathematical excellence
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="https://donate.rwandaolympiad.rw"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-yellow-500 text-black px-8 py-4 rounded-lg font-semibold hover:bg-yellow-400 transition-colors duration-300"
-            >
-              Donate Online
-            </a>
-            <a
-              href="https://corporate.rwandaolympiad.rw"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-900 transition-all duration-300"
-            >
-              Corporate Partnerships
-            </a>
+      {/* Student Opportunities */}
+      <section className="py-12 sm:py-16 lg:py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-4 sm:mb-6">
+              For Students
+            </h2>
+            <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Ready to challenge yourself and represent Rwanda in mathematical competitions?
+            </p>
           </div>
+
+          <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 sm:p-8 lg:p-12 rounded-lg">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center">
+              <div>
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4 sm:mb-6">
+                  Join Our Training Program
+                </h3>
+                <p className="text-sm sm:text-base lg:text-lg text-blue-100 mb-6 sm:mb-8 leading-relaxed">
+                  Participate in district-level competitions, advance to national selections, and join our intensive training camps. The top performers represent Rwanda in international competitions.
+                </p>
+                <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
+                  <div className="flex items-center">
+                    <span className="text-blue-300 mr-2 sm:mr-3">→</span>
+                    <span className="text-sm sm:text-base">District competitions (all 30 districts)</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-blue-300 mr-2 sm:mr-3">→</span>
+                    <span className="text-sm sm:text-base">National selection process</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-blue-300 mr-2 sm:mr-3">→</span>
+                    <span className="text-sm sm:text-base">Intensive training camps</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-blue-300 mr-2 sm:mr-3">→</span>
+                    <span className="text-sm sm:text-base">International competition representation</span>
+                  </div>
+                </div>
+                <Link
+                  to="/contact"
+                  className="inline-block bg-white text-blue-600 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors duration-200 text-sm sm:text-base"
+                >
+                  Start Your Journey
+                </Link>
+              </div>
+              <div className="flex justify-center">
+                <img
+                  src="/lovable-uploads/54fd327f-f5c3-41fe-9b5b-be85e246227a.png"
+                  alt="Student Training"
+                  className="w-full max-w-md rounded-lg shadow-xl"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Information */}
+      <section className="py-12 sm:py-16 lg:py-20 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-6 sm:mb-8">
+            Ready to Get Started?
+          </h2>
+          <p className="text-base sm:text-lg text-gray-600 mb-8 sm:mb-12 leading-relaxed">
+            Contact us today to learn more about how you can contribute to Rwanda's mathematical excellence.
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-8 sm:mb-12">
+            <div className="bg-white p-6 sm:p-8 rounded-lg shadow-md">
+              <Mail className="w-8 sm:w-10 h-8 sm:h-10 text-green-600 mx-auto mb-3 sm:mb-4" />
+              <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">Email Us</h3>
+              <p className="text-sm sm:text-base text-gray-600 break-all">theoneste.sanzabarinda@aims.ac.rw</p>
+            </div>
+            <div className="bg-white p-6 sm:p-8 rounded-lg shadow-md">
+              <Phone className="w-8 sm:w-10 h-8 sm:h-10 text-green-600 mx-auto mb-3 sm:mb-4" />
+              <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">Call Us</h3>
+              <p className="text-sm sm:text-base text-gray-600">+250 788 123 456</p>
+            </div>
+            <div className="bg-white p-6 sm:p-8 rounded-lg shadow-md">
+              <MapPin className="w-8 sm:w-10 h-8 sm:h-10 text-green-600 mx-auto mb-3 sm:mb-4" />
+              <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2">Visit Us</h3>
+              <p className="text-sm sm:text-base text-gray-600">AIMS Rwanda, Kigali</p>
+            </div>
+          </div>
+          
+          <Link
+            to="/contact"
+            className="inline-block bg-green-600 text-white px-8 sm:px-12 py-3 sm:py-4 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-200 text-base sm:text-lg"
+          >
+            Contact Us Today
+          </Link>
         </div>
       </section>
     </div>

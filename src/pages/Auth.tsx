@@ -72,35 +72,35 @@ const Auth = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 overflow-x-hidden">
       <div className="max-w-md w-full">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+        <div className="text-center mb-6 sm:mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
             Mathematics Competition
           </h2>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
+          <p className="mt-2 text-sm sm:text-base text-gray-600 dark:text-gray-400">
             Join the community of math enthusiasts
           </p>
         </div>
 
         <Tabs defaultValue="signin" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="signin">Sign In</TabsTrigger>
-            <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            <TabsTrigger value="signin" className="text-sm sm:text-base">Sign In</TabsTrigger>
+            <TabsTrigger value="signup" className="text-sm sm:text-base">Sign Up</TabsTrigger>
           </TabsList>
 
           <TabsContent value="signin">
             <Card>
               <CardHeader>
-                <CardTitle>Sign In</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-lg sm:text-xl">Sign In</CardTitle>
+                <CardDescription className="text-sm sm:text-base">
                   Enter your credentials to access your account
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSignIn} className="space-y-4">
                   <div>
-                    <Label htmlFor="signin-email">Email</Label>
+                    <Label htmlFor="signin-email" className="text-sm sm:text-base">Email</Label>
                     <Input
                       id="signin-email"
                       type="email"
@@ -108,10 +108,11 @@ const Auth = () => {
                       value={signInData.email}
                       onChange={(e) => setSignInData({ ...signInData, email: e.target.value })}
                       required
+                      className="text-sm sm:text-base"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="signin-password">Password</Label>
+                    <Label htmlFor="signin-password" className="text-sm sm:text-base">Password</Label>
                     <Input
                       id="signin-password"
                       type="password"
@@ -119,9 +120,10 @@ const Auth = () => {
                       value={signInData.password}
                       onChange={(e) => setSignInData({ ...signInData, password: e.target.value })}
                       required
+                      className="text-sm sm:text-base"
                     />
                   </div>
-                  <Button type="submit" className="w-full" disabled={loading}>
+                  <Button type="submit" className="w-full text-sm sm:text-base" disabled={loading}>
                     {loading ? 'Signing in...' : 'Sign In'}
                   </Button>
                 </form>
@@ -132,15 +134,15 @@ const Auth = () => {
           <TabsContent value="signup">
             <Card>
               <CardHeader>
-                <CardTitle>Sign Up</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-lg sm:text-xl">Sign Up</CardTitle>
+                <CardDescription className="text-sm sm:text-base">
                   Create a new account to get started
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSignUp} className="space-y-4">
                   <div>
-                    <Label htmlFor="signup-username">Username</Label>
+                    <Label htmlFor="signup-username" className="text-sm sm:text-base">Username</Label>
                     <Input
                       id="signup-username"
                       type="text"
@@ -148,10 +150,11 @@ const Auth = () => {
                       value={signUpData.username}
                       onChange={(e) => setSignUpData({ ...signUpData, username: e.target.value })}
                       required
+                      className="text-sm sm:text-base"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="signup-email">Email</Label>
+                    <Label htmlFor="signup-email" className="text-sm sm:text-base">Email</Label>
                     <Input
                       id="signup-email"
                       type="email"
@@ -159,10 +162,11 @@ const Auth = () => {
                       value={signUpData.email}
                       onChange={(e) => setSignUpData({ ...signUpData, email: e.target.value })}
                       required
+                      className="text-sm sm:text-base"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="signup-password">Password</Label>
+                    <Label htmlFor="signup-password" className="text-sm sm:text-base">Password</Label>
                     <Input
                       id="signup-password"
                       type="password"
@@ -170,10 +174,11 @@ const Auth = () => {
                       value={signUpData.password}
                       onChange={(e) => setSignUpData({ ...signUpData, password: e.target.value })}
                       required
+                      className="text-sm sm:text-base"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="confirm-password">Confirm Password</Label>
+                    <Label htmlFor="confirm-password" className="text-sm sm:text-base">Confirm Password</Label>
                     <Input
                       id="confirm-password"
                       type="password"
@@ -181,9 +186,10 @@ const Auth = () => {
                       value={signUpData.confirmPassword}
                       onChange={(e) => setSignUpData({ ...signUpData, confirmPassword: e.target.value })}
                       required
+                      className="text-sm sm:text-base"
                     />
                   </div>
-                  <Button type="submit" className="w-full" disabled={loading}>
+                  <Button type="submit" className="w-full text-sm sm:text-base" disabled={loading}>
                     {loading ? 'Creating account...' : 'Sign Up'}
                   </Button>
                 </form>

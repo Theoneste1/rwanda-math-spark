@@ -1,232 +1,225 @@
-import { Mail, Phone, MapPin, Clock, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
+
+import { useState } from "react";
+import { Mail, Phone, MapPin, Clock, Send } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 const Contact = () => {
-  const linkedinUrl = "https://www.linkedin.com/company/103636241/admin/dashboard/";
-  const whatsappNumber = "+250780850611"; // WhatsApp number as requested
-  const whatsappUrl = `https://wa.me/250780850611`; // WhatsApp URL format
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: ""
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle form submission here
+    console.log("Form submitted:", formData);
+    alert("Thank you for your message! We'll get back to you soon.");
+    setFormData({ name: "", email: "", subject: "", message: "" });
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-900 to-green-900 text-white py-20">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-5xl font-bold mb-6">Contact Us</h1>
-          <p className="text-xl opacity-90">
-            Get in touch with our team to learn more about Rwanda Mathematics Olympiad
-          </p>
+      <section className="bg-gradient-to-br from-blue-900 to-blue-700 text-white py-16 sm:py-20 lg:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6">
+              Contact Us
+            </h1>
+            <p className="text-lg sm:text-xl lg:text-2xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
+              Get in touch with the Rwanda Mathematics Olympiad team. We're here to help and answer your questions.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* Contact Information */}
-      <section className="py-20">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Contact Details */}
+      {/* Contact Information and Form */}
+      <section className="py-12 sm:py-16 lg:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+            {/* Contact Information */}
             <div>
-              <h2 className="text-3xl font-bold text-gray-800 mb-8">Get in Touch</h2>
-              <div className="space-y-6">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 sm:mb-8">
+                Get in Touch
+              </h2>
+              <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8 leading-relaxed">
+                Whether you're a student interested in joining our program, a teacher looking to get involved, or an organization wanting to partner with us, we'd love to hear from you.
+              </p>
+
+              <div className="space-y-6 sm:space-y-8">
                 <div className="flex items-start">
-                  <div className="bg-blue-100 p-3 rounded-lg mr-4">
-                    <Mail className="w-6 h-6 text-blue-600" />
-                  </div>
+                  <Mail className="w-6 h-6 text-blue-600 mr-4 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-800 mb-1">Email</h3>
-                    <p className="text-gray-600">theoneste.sanzabarinda@aims.ac.rw</p>
-                    <p className="text-gray-600">tnsnzabarinda@alueducation.com</p>
-                    <p className="text-gray-600">theoneste99@gmail.com</p>
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-1 sm:mb-2">Email</h3>
+                    <p className="text-sm sm:text-base text-gray-600 break-all">theoneste.sanzabarinda@aims.ac.rw</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start">
-                  <div className="bg-green-100 p-3 rounded-lg mr-4">
-                    <Phone className="w-6 h-6 text-green-600" />
-                  </div>
+                  <Phone className="w-6 h-6 text-blue-600 mr-4 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-800 mb-1">Phone</h3>
-                    <p className="text-gray-600">+250 788 123 456</p>
-                    <p className="text-gray-600">+250 788 654 321</p>
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-1 sm:mb-2">Phone</h3>
+                    <p className="text-sm sm:text-base text-gray-600">+250 788 123 456</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start">
-                  <div className="bg-purple-100 p-3 rounded-lg mr-4">
-                    <MapPin className="w-6 h-6 text-purple-600" />
-                  </div>
+                  <MapPin className="w-6 h-6 text-blue-600 mr-4 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-800 mb-1">Office Address</h3>
-                    <p className="text-gray-600">
-                      Rwanda Mathematics Olympiad<br />
-                      KG 123 St, Kigali<br />
-                      Gasabo District, Rwanda
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-1 sm:mb-2">Address</h3>
+                    <p className="text-sm sm:text-base text-gray-600">
+                      African Institute for Mathematical Sciences (AIMS)<br />
+                      KG 3 Ave, Kigali, Rwanda
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start">
-                  <div className="bg-yellow-100 p-3 rounded-lg mr-4">
-                    <Clock className="w-6 h-6 text-yellow-600" />
-                  </div>
+                  <Clock className="w-6 h-6 text-blue-600 mr-4 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-800 mb-1">Office Hours</h3>
-                    <p className="text-gray-600">Monday - Friday: 8:00 AM - 5:00 PM</p>
-                    <p className="text-gray-600">Saturday: 9:00 AM - 1:00 PM</p>
-                    <p className="text-gray-600">Sunday: Closed</p>
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-1 sm:mb-2">Office Hours</h3>
+                    <p className="text-sm sm:text-base text-gray-600">
+                      Monday - Friday: 8:00 AM - 5:00 PM<br />
+                      Saturday: 9:00 AM - 1:00 PM<br />
+                      Sunday: Closed
+                    </p>
                   </div>
                 </div>
-                
-                {/* WhatsApp Contact - New addition */}
-                <div className="flex items-start">
-                  <div className="bg-green-100 p-3 rounded-lg mr-4">
-                    <Phone className="w-6 h-6 text-green-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-800 mb-1">WhatsApp</h3>
-                    <p className="text-gray-600 mb-2">Quick messaging and support</p>
-                    <a
-                      href={whatsappUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-green-600 hover:text-green-800 font-semibold flex items-center"
-                    >
-                      {whatsappNumber}
-                      <span className="ml-2 text-sm text-gray-500">(Click to chat)</span>
-                    </a>
-                  </div>
+              </div>
+
+              {/* Social Media Links */}
+              <div className="mt-8 sm:mt-12">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4">Follow Us</h3>
+                <div className="flex space-x-4">
+                  <a
+                    href="https://www.linkedin.com/company/103636241/admin/dashboard/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 transition-colors duration-200"
+                  >
+                    <span className="sr-only">LinkedIn</span>
+                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                  </a>
+                  <a
+                    href="https://www.instagram.com/rwanda_mathematical_olympiad?igsh=YzljYTk1ODg3Zg=="
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-pink-600 hover:text-pink-800 transition-colors duration-200"
+                  >
+                    <span className="sr-only">Instagram</span>
+                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987s11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.864 3.708 13.713 3.708 12.416s.49-2.448 1.418-3.323c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c.928.875 1.418 2.026 1.418 3.323s-.49 2.448-1.418 3.323c-.875.807-2.026 1.297-3.323 1.297zm7.83-9.404c-.49 0-.875-.385-.875-.875s.385-.875.875-.875.875.385.875.875-.385.875-.875.875zm-3.83 9.404c1.297 0 2.448-.49 3.323-1.297.928-.875 1.418-2.026 1.418-3.323s-.49-2.448-1.418-3.323c-.875-.807-2.026-1.297-3.323-1.297s-2.448.49-3.323 1.297c-.928.875-1.418 2.026-1.418 3.323s.49 2.448 1.418 3.323c.875.807 2.026 1.297 3.323 1.297z"/>
+                    </svg>
+                  </a>
                 </div>
-                
               </div>
             </div>
 
-            {/* Map Placeholder */}
-            <div>
-              <h2 className="text-3xl font-bold text-gray-800 mb-8">Find Us</h2>
-              <div className="bg-gray-200 rounded-lg h-96 flex items-center justify-center">
-                <div className="text-center">
-                  <MapPin className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600 text-lg">Interactive Map</p>
-                  <p className="text-gray-500">Rwanda Mathematics Olympiad Office</p>
-                  <p className="text-gray-500">Kigali, Rwanda</p>
+            {/* Contact Form */}
+            <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-6">
+                Send Us a Message
+              </h2>
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                <div>
+                  <Label htmlFor="name" className="text-sm sm:text-base">Full Name</Label>
+                  <Input
+                    id="name"
+                    name="name"
+                    type="text"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    className="mt-1 text-sm sm:text-base"
+                    placeholder="Your full name"
+                  />
                 </div>
-              </div>
+
+                <div>
+                  <Label htmlFor="email" className="text-sm sm:text-base">Email Address</Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="mt-1 text-sm sm:text-base"
+                    placeholder="your@email.com"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="subject" className="text-sm sm:text-base">Subject</Label>
+                  <Input
+                    id="subject"
+                    name="subject"
+                    type="text"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    required
+                    className="mt-1 text-sm sm:text-base"
+                    placeholder="What is this regarding?"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="message" className="text-sm sm:text-base">Message</Label>
+                  <Textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                    rows={4}
+                    className="mt-1 text-sm sm:text-base resize-none"
+                    placeholder="Tell us more about your inquiry..."
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 sm:py-3 text-sm sm:text-base"
+                >
+                  <Send className="w-4 h-4 mr-2" />
+                  Send Message
+                </Button>
+              </form>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Social Media */}
-      <section className="py-20 bg-white">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-gray-800 mb-8">Follow Us</h2>
-          <p className="text-lg text-gray-600 mb-8">
-            Stay updated with our latest news, student achievements, and upcoming events
-          </p>
-          <div className="flex justify-center space-x-6">
-            <a
-              href={linkedinUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-blue-600 text-white p-4 rounded-full hover:bg-blue-700 transition-colors duration-300 transform hover:scale-110"
-            >
-              <Linkedin className="w-8 h-8" />
-            </a>
-            <a
-              href={linkedinUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-blue-500 text-white p-4 rounded-full hover:bg-blue-600 transition-colors duration-300 transform hover:scale-110"
-            >
-              <Twitter className="w-8 h-8" />
-            </a>
-            <a
-              href={linkedinUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-blue-700 text-white p-4 rounded-full hover:bg-blue-800 transition-colors duration-300 transform hover:scale-110"
-            >
-              <Facebook className="w-8 h-8" />
-            </a>
-            <a
-              href={linkedinUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-pink-500 text-white p-4 rounded-full hover:bg-pink-600 transition-colors duration-300 transform hover:scale-110"
-            >
-              <Instagram className="w-8 h-8" />
-            </a>
+      {/* Map Section */}
+      <section className="py-12 sm:py-16 lg:py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4">
+              Find Us
+            </h2>
+            <p className="text-base sm:text-lg text-gray-600">
+              Located at the African Institute for Mathematical Sciences (AIMS) in Kigali, Rwanda
+            </p>
           </div>
-        </div>
-      </section>
-
-      {/* Quick Contact Cards */}
-      <section className="py-20 bg-gray-100">
-        <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">Quick Contact</h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="bg-white rounded-lg shadow-lg p-8 text-center hover:shadow-xl transition-shadow duration-300">
-              <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
-                <Mail className="w-8 h-8 text-blue-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">For Students & Parents</h3>
-              <p className="text-gray-600 mb-4">
-                Questions about participation, training camps, or academic programs
-              </p>
-              <a
-                href="mailto:theoneste.sanzabarinda@aims.ac.rw"
-                className="text-blue-600 hover:text-blue-800 font-semibold"
-              >
-                theoneste.sanzabarinda@aims.ac.rw
-              </a>
-            </div>
-            
-            <div className="bg-white rounded-lg shadow-lg p-8 text-center hover:shadow-xl transition-shadow duration-300">
-              <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
-                <Mail className="w-8 h-8 text-green-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">For Schools & Teachers</h3>
-              <p className="text-gray-600 mb-4">
-                Partnership opportunities, teacher training, and school registration
-              </p>
-              <a
-                href="mailto:tnsnzabarinda@alueducation.com"
-                className="text-green-600 hover:text-green-800 font-semibold"
-              >
-                tnsnzabarinda@alueducation.com
-              </a>
-            </div>
-            
-            <div className="bg-white rounded-lg shadow-lg p-8 text-center hover:shadow-xl transition-shadow duration-300">
-              <div className="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
-                <Mail className="w-8 h-8 text-purple-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">For Sponsors & Partners</h3>
-              <p className="text-gray-600 mb-4">
-                Investment opportunities, sponsorships, and corporate partnerships
-              </p>
-              <a
-                href="mailto:theoneste99@gmail.com"
-                className="text-purple-600 hover:text-purple-800 font-semibold"
-              >
-                theoneste99@gmail.com
-              </a>
-            </div>
-            
-            {/* WhatsApp Quick Contact - New addition */}
-            <div className="bg-white rounded-lg shadow-lg p-8 text-center hover:shadow-xl transition-shadow duration-300">
-              <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
-                <Phone className="w-8 h-8 text-green-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">WhatsApp Support</h3>
-              <p className="text-gray-600 mb-4">
-                Quick questions, instant support, and real-time communication
-              </p>
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors duration-200 font-semibold"
-              >
-                Chat Now
-              </a>
+          <div className="bg-gray-200 rounded-lg h-64 sm:h-80 lg:h-96 flex items-center justify-center">
+            <div className="text-center text-gray-600">
+              <MapPin className="w-12 h-12 mx-auto mb-4" />
+              <p className="text-sm sm:text-base">Interactive map would be embedded here</p>
+              <p className="text-xs sm:text-sm mt-2">KG 3 Ave, Kigali, Rwanda</p>
             </div>
           </div>
         </div>
