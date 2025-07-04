@@ -268,6 +268,7 @@ const Campers = () => {
 
       alert(`Successfully generated ${selectedCampers.size} invitation letters!`);
     } catch (error) {
+      console.error('Error generating PDFs:', error);
       alert('There was an error generating the letters. Please try again.');
     } finally {
       setIsGenerating(false);
@@ -293,7 +294,7 @@ const Campers = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 pt-16">
-        <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-8">
           <div className="flex items-center justify-center h-64">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
@@ -308,10 +309,10 @@ const Campers = () => {
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50 pt-16">
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          <div className="text-center text-red-600 bg-red-50 p-6 rounded-lg">
-            <h2 className="text-xl font-semibold mb-2">Error Loading Data</h2>
-            <p>Unable to load campers data. Please check your internet connection and try again.</p>
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-8">
+          <div className="text-center text-red-600 bg-red-50 p-4 sm:p-6 rounded-lg mx-2">
+            <h2 className="text-lg sm:text-xl font-semibold mb-2">Error Loading Data</h2>
+            <p className="text-sm sm:text-base">Unable to load campers data. Please check your internet connection and try again.</p>
           </div>
         </div>
       </div>
@@ -320,44 +321,44 @@ const Campers = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 pt-16">
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-8">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">
+        <div className="text-center mb-6 sm:mb-8 px-2">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-4 leading-tight">
             Rwanda Olympiad Summer Camp 2025
           </h1>
-          <div className="flex items-center justify-center gap-6 text-gray-600">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 text-gray-600 text-sm sm:text-base">
             <div className="flex items-center gap-2">
-              <Users className="w-5 h-5" />
+              <Users className="w-4 h-4 sm:w-5 sm:h-5" />
               <span>{campers.length} Total Campers</span>
             </div>
             <div className="flex items-center gap-2">
-              <FileText className="w-5 h-5" />
+              <FileText className="w-4 h-4 sm:w-5 sm:h-5" />
               <span>{selectedCampers.size} Selected</span>
             </div>
           </div>
         </div>
         
         {/* Search and Actions */}
-        <div className="mb-6 flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
-          <div className="relative flex-1 max-w-md">
+        <div className="mb-4 sm:mb-6 flex flex-col gap-3 sm:gap-4 px-2">
+          <div className="relative w-full">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <Input
               type="text"
-              placeholder="Search campers by name, school, or district..."
+              placeholder="Search campers..."
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
                 setCurrentPage(1);
               }}
-              className="pl-10"
+              className="pl-10 w-full text-sm sm:text-base"
             />
           </div>
           
           <Button
             onClick={generatePDFLetters}
             disabled={selectedCampers.size === 0 || isGenerating}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto text-sm sm:text-base py-2 sm:py-2.5"
           >
             {isGenerating ? (
               <>
@@ -374,90 +375,103 @@ const Campers = () => {
         </div>
 
         {/* Results Summary */}
-        <div className="mb-4 text-sm text-gray-600">
+        <div className="mb-3 sm:mb-4 text-xs sm:text-sm text-gray-600 px-2">
           Showing {currentCampers.length} of {filteredCampers.length} campers
           {searchTerm && ` (filtered from ${campers.length} total)`}
         </div>
 
         {/* Campers Table */}
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          <style>{`
-            .improved-table {
-              border-collapse: collapse;
-              width: 100%;
-            }
-            .improved-table th {
-              background-color: #00A46C;
-              color: white;
-              padding: 12px;
-              text-align: left;
-              font-weight: bold;
-            }
-            .improved-table td {
-              padding: 12px;
-              border-bottom: 1px solid #ddd;
-            }
-            .improved-table tr:nth-child(odd) td {
-              background-color: #ffffff;
-            }
-            .improved-table tr:nth-child(even) td {
-              background-color: #f8f9fa;
-            }
-            .improved-table tr:hover td {
-              background-color: #e3f2fd;
-            }
-          `}</style>
-          <Table className="improved-table">
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-12">
-                  <Checkbox
-                    checked={selectedCampers.size === currentCampers.length && currentCampers.length > 0}
-                    onCheckedChange={toggleSelectAll}
-                  />
-                </TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>School</TableHead>
-                <TableHead>District</TableHead>
-                <TableHead>Gender</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {currentCampers.map((camper, index) => (
-                <TableRow key={index}>
-                  <TableCell>
+        <div className="bg-white rounded-lg shadow overflow-hidden mx-2">
+          <div className="overflow-x-auto">
+            <style>{`
+              .improved-table {
+                border-collapse: collapse;
+                width: 100%;
+                min-width: 600px;
+              }
+              .improved-table th {
+                background-color: #00A46C;
+                color: white;
+                padding: 8px 12px;
+                text-align: left;
+                font-weight: bold;
+                font-size: 14px;
+                white-space: nowrap;
+              }
+              .improved-table td {
+                padding: 8px 12px;
+                border-bottom: 1px solid #ddd;
+                font-size: 14px;
+              }
+              .improved-table tr:nth-child(odd) td {
+                background-color: #ffffff;
+              }
+              .improved-table tr:nth-child(even) td {
+                background-color: #f8f9fa;
+              }
+              .improved-table tr:hover td {
+                background-color: #e3f2fd;
+              }
+              @media (max-width: 640px) {
+                .improved-table th,
+                .improved-table td {
+                  padding: 6px 8px;
+                  font-size: 12px;
+                }
+              }
+            `}</style>
+            <Table className="improved-table">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-12">
                     <Checkbox
-                      checked={selectedCampers.has(camper.name)}
-                      onCheckedChange={() => toggleCamperSelection(camper.name)}
+                      checked={selectedCampers.size === currentCampers.length && currentCampers.length > 0}
+                      onCheckedChange={toggleSelectAll}
                     />
-                  </TableCell>
-                  <TableCell className="font-medium">{camper.name}</TableCell>
-                  <TableCell>{camper.school}</TableCell>
-                  <TableCell>{camper.district}</TableCell>
-                  <TableCell>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      camper.gender === 'Male' 
-                        ? 'bg-blue-100 text-blue-800' 
-                        : 'bg-pink-100 text-pink-800'
-                    }`}>
-                      {camper.gender}
-                    </span>
-                  </TableCell>
+                  </TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>School</TableHead>
+                  <TableHead>District</TableHead>
+                  <TableHead>Gender</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {currentCampers.map((camper, index) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      <Checkbox
+                        checked={selectedCampers.has(camper.name)}
+                        onCheckedChange={() => toggleCamperSelection(camper.name)}
+                      />
+                    </TableCell>
+                    <TableCell className="font-medium">{camper.name}</TableCell>
+                    <TableCell>{camper.school}</TableCell>
+                    <TableCell>{camper.district}</TableCell>
+                    <TableCell>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        camper.gender === 'Male' 
+                          ? 'bg-blue-100 text-blue-800' 
+                          : 'bg-pink-100 text-pink-800'
+                      }`}>
+                        {camper.gender}
+                      </span>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="mt-6 flex justify-center">
+          <div className="mt-4 sm:mt-6 flex justify-center px-2">
             <Pagination>
-              <PaginationContent>
+              <PaginationContent className="flex-wrap gap-1">
                 <PaginationItem>
                   <PaginationPrevious
                     onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                    className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    className={`${currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"} text-xs sm:text-sm px-2 sm:px-3`}
                   />
                 </PaginationItem>
                 
@@ -467,14 +481,14 @@ const Campers = () => {
                     <PaginationItem>
                       <PaginationLink
                         onClick={() => setCurrentPage(1)}
-                        className="cursor-pointer"
+                        className="cursor-pointer text-xs sm:text-sm px-2 sm:px-3"
                       >
                         1
                       </PaginationLink>
                     </PaginationItem>
                     {visiblePages[0] > 2 && (
                       <PaginationItem>
-                        <span className="px-3 py-2 text-sm text-gray-500">...</span>
+                        <span className="px-2 sm:px-3 py-2 text-xs sm:text-sm text-gray-500">...</span>
                       </PaginationItem>
                     )}
                   </>
@@ -486,7 +500,7 @@ const Campers = () => {
                     <PaginationLink
                       onClick={() => setCurrentPage(page)}
                       isActive={currentPage === page}
-                      className="cursor-pointer"
+                      className="cursor-pointer text-xs sm:text-sm px-2 sm:px-3"
                     >
                       {page}
                     </PaginationLink>
@@ -498,13 +512,13 @@ const Campers = () => {
                   <>
                     {visiblePages[visiblePages.length - 1] < totalPages - 1 && (
                       <PaginationItem>
-                        <span className="px-3 py-2 text-sm text-gray-500">...</span>
+                        <span className="px-2 sm:px-3 py-2 text-xs sm:text-sm text-gray-500">...</span>
                       </PaginationItem>
                     )}
                     <PaginationItem>
                       <PaginationLink
                         onClick={() => setCurrentPage(totalPages)}
-                        className="cursor-pointer"
+                        className="cursor-pointer text-xs sm:text-sm px-2 sm:px-3"
                       >
                         {totalPages}
                       </PaginationLink>
@@ -515,7 +529,7 @@ const Campers = () => {
                 <PaginationItem>
                   <PaginationNext
                     onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                    className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                    className={`${currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"} text-xs sm:text-sm px-2 sm:px-3`}
                   />
                 </PaginationItem>
               </PaginationContent>

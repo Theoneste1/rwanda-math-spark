@@ -10,34 +10,34 @@ const Footer = () => {
 
   return (
     <footer className="bg-gray-900 text-white">
-      <div className="max-w-6xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="max-w-6xl mx-auto px-4 py-8 sm:py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {/* Logo and Description */}
-          <div className="col-span-1 md:col-span-2">
+          <div className="col-span-1 sm:col-span-2 lg:col-span-2">
             <Link to="/" className="flex items-center mb-4">
-              {/* Rwanda Mathematics Olympiad logo */}
+              {/* Rwanda Mathematics Olympiad logo - Improved mobile sizing */}
               <img 
                 src="/lovable-uploads/0115baec-ea29-4a53-b52e-009316b8fed0.png" 
                 alt="Rwanda Mathematics Olympiad" 
-                className="h-12 w-auto mr-3"
+                className="h-12 sm:h-14 md:h-16 w-auto mr-3 flex-shrink-0"
               />
-              <span className="text-2xl font-bold text-blue-400">Rwanda Mathematics Olympiad</span>
+              <span className="text-lg sm:text-xl lg:text-2xl font-bold text-blue-400 leading-tight">Rwanda Mathematics Olympiad</span>
             </Link>
-            <p className="text-gray-300 mb-4">
+            <p className="text-gray-300 mb-4 text-sm sm:text-base">
               Rwanda Mathematics Olympiad - Empowering Rwanda's future STEM leaders through mathematical excellence and innovation.
             </p>
             
             {/* Social media icons */}
-            <div className="flex space-x-4">
+            <div className="flex flex-wrap gap-3 sm:gap-4">
               {/* LinkedIn */}
               <a
                 href={linkedinUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-blue-400 transition-colors duration-200"
+                className="text-gray-400 hover:text-blue-400 transition-colors duration-200 p-1"
                 aria-label="Follow us on LinkedIn"
               >
-                <Linkedin className="w-6 h-6" />
+                <Linkedin className="w-6 h-6 sm:w-7 sm:h-7" />
               </a>
               
               {/* WhatsApp */}
@@ -45,11 +45,11 @@ const Footer = () => {
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-green-400 transition-colors duration-200"
+                className="text-gray-400 hover:text-green-400 transition-colors duration-200 p-1"
                 aria-label="Join our WhatsApp group"
               >
                 <svg 
-                  className="w-6 h-6" 
+                  className="w-6 h-6 sm:w-7 sm:h-7" 
                   fill="currentColor" 
                   viewBox="0 0 24 24"
                   aria-hidden="true"
@@ -63,10 +63,10 @@ const Footer = () => {
                 href={linkedinUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-blue-400 transition-colors duration-200"
+                className="text-gray-400 hover:text-blue-400 transition-colors duration-200 p-1"
                 aria-label="Follow us on Twitter"
               >
-                <Twitter className="w-6 h-6" />
+                <Twitter className="w-6 h-6 sm:w-7 sm:h-7" />
               </a>
               
               {/* Facebook */}
@@ -74,10 +74,10 @@ const Footer = () => {
                 href={linkedinUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-blue-400 transition-colors duration-200"
+                className="text-gray-400 hover:text-blue-400 transition-colors duration-200 p-1"
                 aria-label="Follow us on Facebook"
               >
-                <Facebook className="w-6 h-6" />
+                <Facebook className="w-6 h-6 sm:w-7 sm:h-7" />
               </a>
               
               {/* Instagram with updated link */}
@@ -85,35 +85,35 @@ const Footer = () => {
                 href={instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-pink-400 transition-colors duration-200"
+                className="text-gray-400 hover:text-pink-400 transition-colors duration-200 p-1"
                 aria-label="Follow us on Instagram"
               >
-                <Instagram className="w-6 h-6" />
+                <Instagram className="w-6 h-6 sm:w-7 sm:h-7" />
               </a>
             </div>
           </div>
 
           {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+          <div className="min-w-0">
+            <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/about" className="text-gray-300 hover:text-white transition-colors duration-200">
+                <Link to="/about" className="text-gray-300 hover:text-white transition-colors duration-200 text-sm sm:text-base block">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link to="/impact" className="text-gray-300 hover:text-white transition-colors duration-200">
+                <Link to="/impact" className="text-gray-300 hover:text-white transition-colors duration-200 text-sm sm:text-base block">
                   Our Impact
                 </Link>
               </li>
               <li>
-                <Link to="/team" className="text-gray-300 hover:text-white transition-colors duration-200">
+                <Link to="/team" className="text-gray-300 hover:text-white transition-colors duration-200 text-sm sm:text-base block">
                   Meet the Team
                 </Link>
               </li>
               <li>
-                <Link to="/get-involved" className="text-gray-300 hover:text-white transition-colors duration-200">
+                <Link to="/get-involved" className="text-gray-300 hover:text-white transition-colors duration-200 text-sm sm:text-base block">
                   Get Involved
                 </Link>
               </li>
@@ -121,27 +121,27 @@ const Footer = () => {
           </div>
 
           {/* Contact Info */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Contact</h3>
+          <div className="min-w-0">
+            <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Contact</h3>
             <ul className="space-y-2">
-              <li className="flex items-center text-gray-300">
-                <Mail className="w-4 h-4 mr-2" />
-                theoneste.sanzabarinda@aims.ac.rw
+              <li className="flex items-start text-gray-300 text-sm sm:text-base">
+                <Mail className="w-4 h-4 sm:w-5 sm:h-5 mr-2 mt-0.5 flex-shrink-0" />
+                <span className="break-all">theoneste.sanzabarinda@aims.ac.rw</span>
               </li>
-              <li className="flex items-center text-gray-300">
-                <Phone className="w-4 h-4 mr-2" />
-                +250 788 123 456
+              <li className="flex items-center text-gray-300 text-sm sm:text-base">
+                <Phone className="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0" />
+                <span>+250 788 123 456</span>
               </li>
-              <li className="flex items-center text-gray-300">
-                <MapPin className="w-4 h-4 mr-2" />
-                Kigali, Rwanda
+              <li className="flex items-start text-gray-300 text-sm sm:text-base">
+                <MapPin className="w-4 h-4 sm:w-5 sm:h-5 mr-2 mt-0.5 flex-shrink-0" />
+                <span>Kigali, Rwanda</span>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center">
-          <p className="text-gray-400">
+        <div className="border-t border-gray-800 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center">
+          <p className="text-gray-400 text-sm sm:text-base">
             © 2025 Rwanda Mathematics Olympiad. All rights reserved.
           </p>
         </div>

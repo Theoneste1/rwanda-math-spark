@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ChevronDown } from "lucide-react";
@@ -50,19 +51,19 @@ const Navigation = () => {
 
   return (
     <nav className="bg-white shadow-lg fixed w-full top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo section */}
-          <Link to="/" className="flex items-center">
+          {/* Logo section - Improved mobile sizing */}
+          <Link to="/" className="flex items-center flex-shrink-0">
             <img 
               src="/lovable-uploads/0115baec-ea29-4a53-b52e-009316b8fed0.png" 
               alt="Rwanda Mathematics Olympiad" 
-              className="h-12 w-auto"
+              className="h-10 sm:h-12 w-auto"
             />
           </Link>
 
           {/* Desktop Navigation Menu */}
-          <div className="hidden md:flex space-x-8">
+          <div className="hidden lg:flex space-x-4 xl:space-x-8">
             {navItems.map((item) => (
               <div key={item.name} className="relative group">
                 {/* Check if item has submenu */}
@@ -70,7 +71,7 @@ const Navigation = () => {
                   <div>
                     {/* Dropdown trigger button */}
                     <button
-                      className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center gap-1 ${
+                      className={`px-2 xl:px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center gap-1 whitespace-nowrap ${
                         isActive(item.path) || hasActiveSubmenu(item.submenu)
                           ? "text-blue-600 bg-blue-50"
                           : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
@@ -108,7 +109,7 @@ const Navigation = () => {
                   // Regular navigation link without dropdown
                   <Link
                     to={item.path}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                    className={`px-2 xl:px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 whitespace-nowrap ${
                       isActive(item.path)
                         ? "text-blue-600 bg-blue-50"
                         : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
@@ -122,10 +123,10 @@ const Navigation = () => {
           </div>
 
           {/* Mobile menu hamburger button */}
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-700 hover:text-blue-600 focus:outline-none focus:text-blue-600"
+              className="text-gray-700 hover:text-blue-600 focus:outline-none focus:text-blue-600 p-2"
             >
               {/* Toggle between hamburger and X icon */}
               {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -136,7 +137,7 @@ const Navigation = () => {
 
       {/* Mobile Navigation Menu - only shown when isOpen is true */}
       {isOpen && (
-        <div className="md:hidden bg-white border-t">
+        <div className="lg:hidden bg-white border-t max-h-screen overflow-y-auto">
           <div className="px-2 pt-2 pb-3 space-y-1">
             {navItems.map((item) => (
               <div key={item.name}>
